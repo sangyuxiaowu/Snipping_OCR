@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32819.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AAAPrintScreen", "AAAPrintScreen\AAAPrintScreen.csproj", "{EDDE6D58-EF83-4C43-9DCF-35347DC3466E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EDDE6D58-EF83-4C43-9DCF-35347DC3466E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDDE6D58-EF83-4C43-9DCF-35347DC3466E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDDE6D58-EF83-4C43-9DCF-35347DC3466E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDDE6D58-EF83-4C43-9DCF-35347DC3466E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {78D6B626-A2DD-4119-AF6D-4ADF9079E14F}
+	EndGlobalSection
+EndGlobal
