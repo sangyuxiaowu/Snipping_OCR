@@ -1,3 +1,5 @@
+using CCWin.SkinControl;
+
 namespace AAAPrintScreen
 {
     public partial class Main : Form
@@ -27,7 +29,7 @@ namespace AAAPrintScreen
                     if (alt_Num >= 3)
                     {
                         alt_Num = 0;
-                        SendKeys.Send("Win+Shift+S");
+                        StartCapture();
                     }
                 }
                 else
@@ -36,6 +38,43 @@ namespace AAAPrintScreen
                     alt_last = DateTime.Now;
                 }
             }
+        }
+        /// <summary>
+        /// ½ØÍ¼¿Ø¼þ
+        /// </summary>
+        private FrmCapture m_frmCapture;
+        private void StartCapture()
+        {
+            // Òþ²Ø
+            WindowsAPI.ShowWindow(this.Handle, 0);
+            if (m_frmCapture == null || m_frmCapture.IsDisposed)
+            {
+                m_frmCapture = new FrmCapture();
+            }
+            m_frmCapture.IsCaptureCursor = false;
+            m_frmCapture.Disposed += M_frmCapture_Disposed;
+            m_frmCapture.Show();
+        }
+
+        private void M_frmCapture_Disposed(object? sender, EventArgs e)
+        {
+            WindowsAPI.ShowWindow(this.Handle, 9);
+            var img = Clipboard.GetImage();
+            if (img == null) return;
+            sqPhoto.Image = img;
+        }
+
+        private void sqPhoto_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] allow = new string[] { "jpg", "png", "gif", "peg", "bmp" };
+            string file = ((System.Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString();
+            string ext = file.ToLower().Substring(file.Length - 3);
+            if (allow.Contains(ext)) showFileOCR(file);
+        }
+
+        private void showFileOCR(string file)
+        {
+            throw new NotImplementedException();
         }
     }
 }
