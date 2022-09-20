@@ -1,4 +1,6 @@
 using CCWin.SkinControl;
+using PaddleOCRSharp;
+using System.Security.Cryptography;
 
 namespace AAAPrintScreen
 {
@@ -10,35 +12,22 @@ namespace AAAPrintScreen
             InitializeComponent();
         }
 
+        /// <summary>
+        /// 覆写窗体消息
+        /// </summary>
+        /// <param name="m"></param>
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+            Hotkey.ProcessHotKey(m);
+        }
         private void Main_Load(object sender, EventArgs e)
         {
-            var k_hook = new KeyboardHook();
-            k_hook.KeyDownEvent += new KeyEventHandler(hook_KeyDown);//钩住键按下
-            k_hook.Start();//安装键盘钩子
+            //注册热键 Ctrl+ALT+V 截图
+            Hotkey.Regist(base.Handle, HotkeyModifiers.MOD_CONTROL_ALT, Keys.A, new Hotkey.HotKeyCallBackHanlder(StartCapture));
         }
-        private int alt_Num = 0;
-        private DateTime alt_last = DateTime.Now;
-        private void hook_KeyDown(object sender, KeyEventArgs e)
-        {
-            //判断按下的键 ALT
-            if (e.KeyValue == 164 || e.KeyValue == 165)
-            {
-                if((alt_last - DateTime.Now).TotalMilliseconds < 800)
-                {
-                    alt_Num++;
-                    if (alt_Num >= 3)
-                    {
-                        alt_Num = 0;
-                        StartCapture();
-                    }
-                }
-                else
-                {
-                    alt_Num = 1;
-                    alt_last = DateTime.Now;
-                }
-            }
-        }
+
+
         /// <summary>
         /// 截图控件
         /// </summary>
@@ -46,7 +35,8 @@ namespace AAAPrintScreen
         private void StartCapture()
         {
             // 隐藏
-            WindowsAPI.ShowWindow(this.Handle, 0);
+            this.WindowState = FormWindowState.Minimized;
+            this.Hide();
             if (m_frmCapture == null || m_frmCapture.IsDisposed)
             {
                 m_frmCapture = new FrmCapture();
@@ -62,6 +52,7 @@ namespace AAAPrintScreen
             var img = Clipboard.GetImage();
             if (img == null) return;
             sqPhoto.Image = img;
+            timeOCR_Start();
         }
 
         private void sqPhoto_DragDrop(object sender, DragEventArgs e)
@@ -69,12 +60,63 @@ namespace AAAPrintScreen
             string[] allow = new string[] { "jpg", "png", "gif", "peg", "bmp" };
             string file = ((System.Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString();
             string ext = file.ToLower().Substring(file.Length - 3);
-            if (allow.Contains(ext)) showFileOCR(file);
+            if (allow.Contains(ext))
+            {
+                sqPhoto.Image = Image.FromFile(file);
+                timeOCR_Start();
+            }
+        }
+        private void sqPhoto_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.All;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
         }
 
-        private void showFileOCR(string file)
+        private void showFileOcr(Image imgfile)
         {
-            throw new NotImplementedException();
+
+            //识别结果对象
+            var ocrResult = new OCRResult();
+            using PaddleOCREngine engine = new PaddleOCREngine(null, new OCRParameter());
+            ocrResult = engine.DetectText(imgfile);
+            if (!ocrResult.IsNull())
+            {
+                textOCR.Text = "";
+                foreach (var item in ocrResult.TextBlocks)
+                {
+                    textOCR.Text += item.Text+"\r\n";
+                }
+            }
+            textOCR.Cursor = Cursors.IBeam;
+        }
+
+        private void timeOCR_Start() {
+            textOCR.Cursor = Cursors.WaitCursor;
+            timerOCR.Enabled = true;
+        }
+        private void timerOCR_Tick(object sender, EventArgs e)
+        {
+            timerOCR.Enabled = false;
+            showFileOcr(sqPhoto.Image);
+        }
+
+        private void notifyIcon_DoubleClick(object sender, EventArgs e)
+        {
+            WindowsAPI.ShowWindow(this.Handle, 9);
+        }
+
+        private void Main_SizeChanged(object sender, EventArgs e)
+        {
+            if(this.WindowState == FormWindowState.Minimized)
+            {
+                this.Hide();
+            }
         }
     }
 }

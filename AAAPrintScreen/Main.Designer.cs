@@ -28,15 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.sqPhoto = new AAAPrintScreen.Component.SQPhoto();
             this.textOCR = new System.Windows.Forms.TextBox();
+            this.timerOCR = new System.Windows.Forms.Timer(this.components);
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
             this.SuspendLayout();
-
             // 
             // splitContainer
             // 
@@ -76,6 +79,7 @@
             this.sqPhoto.ZoomCenter = true;
             this.sqPhoto.ZoomMin = 100;
             this.sqPhoto.DragDrop += new System.Windows.Forms.DragEventHandler(this.sqPhoto_DragDrop);
+            this.sqPhoto.DragEnter += new System.Windows.Forms.DragEventHandler(this.sqPhoto_DragEnter);
             // 
             // textOCR
             // 
@@ -85,23 +89,35 @@
             this.textOCR.Location = new System.Drawing.Point(0, 0);
             this.textOCR.Multiline = true;
             this.textOCR.Name = "textOCR";
+            this.textOCR.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textOCR.Size = new System.Drawing.Size(280, 461);
             this.textOCR.TabIndex = 0;
             // 
+            // timerOCR
+            // 
+            this.timerOCR.Tick += new System.EventHandler(this.timerOCR_Tick);
+            // 
+            // notifyIcon
+            // 
+            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Text = "截图 OCR";
+            this.notifyIcon.Visible = true;
+            this.notifyIcon.DoubleClick += new System.EventHandler(this.notifyIcon_DoubleClick);
+            // 
             // Main
             // 
-            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 461);
             this.Controls.Add(this.splitContainer);
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(800, 500);
-            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(800, 500);
             this.Name = "Main";
+            this.ShowInTaskbar = false;
             this.Text = "屏幕 OCR";
             this.Load += new System.EventHandler(this.Main_Load);
+            this.SizeChanged += new System.EventHandler(this.Main_SizeChanged);
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
             this.splitContainer.Panel2.PerformLayout();
@@ -116,5 +132,7 @@
         private SplitContainer splitContainer;
         private Component.SQPhoto sqPhoto;
         private TextBox textOCR;
+        private System.Windows.Forms.Timer timerOCR;
+        private NotifyIcon notifyIcon;
     }
 }

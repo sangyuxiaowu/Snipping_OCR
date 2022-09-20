@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <Reference Include="CSkin">
-      <HintPath>..\..\CSkin 16.1.14.3\CSkin 4.0\CSkin.dll</HintPath>
+      <HintPath>..\CSkin 4.0\CSkin.dll</HintPath>
     </Reference>
   </ItemGroup>
 
