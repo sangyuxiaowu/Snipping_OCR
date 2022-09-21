@@ -18,10 +18,4 @@
     <PackageReference Include="PaddleOCRSharp" Version="2.0.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="CSkin">
-      <HintPath>..\CSkin 4.0\CSkin.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

@@ -1,6 +1,6 @@
-using CCWin.SkinControl;
+using AAAPrintScreen.Component;
 using PaddleOCRSharp;
-using System.Security.Cryptography;
+using System.Diagnostics;
 
 namespace AAAPrintScreen
 {
@@ -21,40 +21,69 @@ namespace AAAPrintScreen
             base.WndProc(ref m);
             Hotkey.ProcessHotKey(m);
         }
+
+        /// <summary>
+        /// 启动，注册热键
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Main_Load(object sender, EventArgs e)
         {
-            //注册热键 Ctrl+ALT+V 截图
+            //注册热键 Ctrl+ALT+A 截图
             Hotkey.Regist(base.Handle, HotkeyModifiers.MOD_CONTROL_ALT, Keys.A, new Hotkey.HotKeyCallBackHanlder(StartCapture));
         }
 
 
+
         /// <summary>
-        /// 截图控件
+        /// 调用系统截图处理
         /// </summary>
-        private FrmCapture m_frmCapture;
         private void StartCapture()
         {
             // 隐藏
             this.WindowState = FormWindowState.Minimized;
             this.Hide();
-            if (m_frmCapture == null || m_frmCapture.IsDisposed)
+            Process snippingToolProcess = new Process()
             {
-                m_frmCapture = new FrmCapture();
-            }
-            m_frmCapture.IsCaptureCursor = false;
-            m_frmCapture.Disposed += M_frmCapture_Disposed;
-            m_frmCapture.Show();
+                StartInfo = new ProcessStartInfo("C:\\Windows\\system32\\SnippingTool.exe", "/clip"),
+                EnableRaisingEvents = true,
+            };
+            snippingToolProcess.Exited += SnippingToolProcess_Exited;
+            snippingToolProcess.Start();
         }
 
-        private void M_frmCapture_Disposed(object? sender, EventArgs e)
+        /// <summary>
+        /// 截图完成
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SnippingToolProcess_Exited(object? sender, EventArgs e)
         {
+            this.BeginInvoke(new Action(() =>
+            {
+                ClipboardOCR();
+            }));
+        }
+
+        /// <summary>
+        /// 从剪切板获取图片并识别
+        /// </summary>
+        private void ClipboardOCR()
+        {
+
             WindowsAPI.ShowWindow(this.Handle, 9);
             var img = Clipboard.GetImage();
             if (img == null) return;
             sqPhoto.Image = img;
             timeOCR_Start();
+
         }
 
+        /// <summary>
+        /// 拖放图片
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void sqPhoto_DragDrop(object sender, DragEventArgs e)
         {
             string[] allow = new string[] { "jpg", "png", "gif", "peg", "bmp" };
@@ -66,6 +95,12 @@ namespace AAAPrintScreen
                 timeOCR_Start();
             }
         }
+
+        /// <summary>
+        /// 允许拖放
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void sqPhoto_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -78,6 +113,10 @@ namespace AAAPrintScreen
             }
         }
 
+        /// <summary>
+        /// 执行OCR识别图片
+        /// </summary>
+        /// <param name="imgfile"></param>
         private void showFileOcr(Image imgfile)
         {
 
@@ -85,7 +124,7 @@ namespace AAAPrintScreen
             var ocrResult = new OCRResult();
             using PaddleOCREngine engine = new PaddleOCREngine(null, new OCRParameter());
             ocrResult = engine.DetectText(imgfile);
-            if (!ocrResult.IsNull())
+            if (ocrResult.TextBlocks.Count>0)
             {
                 textOCR.Text = "";
                 foreach (var item in ocrResult.TextBlocks)
@@ -96,6 +135,9 @@ namespace AAAPrintScreen
             textOCR.Cursor = Cursors.IBeam;
         }
 
+        /// <summary>
+        /// 启动识别
+        /// </summary>
         private void timeOCR_Start() {
             textOCR.Cursor = Cursors.WaitCursor;
             timerOCR.Enabled = true;
@@ -105,6 +147,7 @@ namespace AAAPrintScreen
             timerOCR.Enabled = false;
             showFileOcr(sqPhoto.Image);
         }
+
 
         private void notifyIcon_DoubleClick(object sender, EventArgs e)
         {
@@ -118,5 +161,7 @@ namespace AAAPrintScreen
                 this.Hide();
             }
         }
+
+        
     }
 }

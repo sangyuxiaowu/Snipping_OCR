@@ -116,6 +116,7 @@
             this.Name = "Main";
             this.ShowInTaskbar = false;
             this.Text = "屏幕 OCR";
+            this.TopMost = true;
             this.Load += new System.EventHandler(this.Main_Load);
             this.SizeChanged += new System.EventHandler(this.Main_SizeChanged);
             this.splitContainer.Panel1.ResumeLayout(false);
