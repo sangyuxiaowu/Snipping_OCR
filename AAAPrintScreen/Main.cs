@@ -162,6 +162,19 @@ namespace AAAPrintScreen
             }
         }
 
-        
+        private void 退出软件ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
+        private void 识别剪贴板ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ClipboardOCR();
+        }
+
+        private void 显示ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WindowsAPI.ShowWindow(this.Handle, 9);
+        }
     }
 }
