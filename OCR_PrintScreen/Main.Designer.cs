@@ -1,4 +1,4 @@
-﻿namespace AAAPrintScreen
+﻿namespace OCR_PrintScreen
 {
     partial class Main
     {
@@ -31,14 +31,13 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.sqPhoto = new AAAPrintScreen.Component.SQPhoto();
+            this.sqPhoto = new SQPhoto.SQPhoto();
             this.textOCR = new System.Windows.Forms.TextBox();
-            this.timerOCR = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.iconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.显示ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.退出软件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.识别剪贴板ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.退出软件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -98,10 +97,6 @@
             this.textOCR.Size = new System.Drawing.Size(280, 461);
             this.textOCR.TabIndex = 0;
             // 
-            // timerOCR
-            // 
-            this.timerOCR.Tick += new System.EventHandler(this.timerOCR_Tick);
-            // 
             // notifyIcon
             // 
             this.notifyIcon.ContextMenuStrip = this.iconMenu;
@@ -117,28 +112,28 @@
             this.识别剪贴板ToolStripMenuItem,
             this.退出软件ToolStripMenuItem});
             this.iconMenu.Name = "iconMenu";
-            this.iconMenu.Size = new System.Drawing.Size(181, 92);
+            this.iconMenu.Size = new System.Drawing.Size(137, 70);
             // 
             // 显示ToolStripMenuItem
             // 
             this.显示ToolStripMenuItem.Name = "显示ToolStripMenuItem";
-            this.显示ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.显示ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.显示ToolStripMenuItem.Text = "显示界面";
             this.显示ToolStripMenuItem.Click += new System.EventHandler(this.显示ToolStripMenuItem_Click);
-            // 
-            // 退出软件ToolStripMenuItem
-            // 
-            this.退出软件ToolStripMenuItem.Name = "退出软件ToolStripMenuItem";
-            this.退出软件ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.退出软件ToolStripMenuItem.Text = "退出软件";
-            this.退出软件ToolStripMenuItem.Click += new System.EventHandler(this.退出软件ToolStripMenuItem_Click);
             // 
             // 识别剪贴板ToolStripMenuItem
             // 
             this.识别剪贴板ToolStripMenuItem.Name = "识别剪贴板ToolStripMenuItem";
-            this.识别剪贴板ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.识别剪贴板ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.识别剪贴板ToolStripMenuItem.Text = "识别剪贴板";
             this.识别剪贴板ToolStripMenuItem.Click += new System.EventHandler(this.识别剪贴板ToolStripMenuItem_Click);
+            // 
+            // 退出软件ToolStripMenuItem
+            // 
+            this.退出软件ToolStripMenuItem.Name = "退出软件ToolStripMenuItem";
+            this.退出软件ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.退出软件ToolStripMenuItem.Text = "退出软件";
+            this.退出软件ToolStripMenuItem.Click += new System.EventHandler(this.退出软件ToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -168,9 +163,8 @@
         #endregion
 
         private SplitContainer splitContainer;
-        private Component.SQPhoto sqPhoto;
+        private SQPhoto.SQPhoto sqPhoto;
         private TextBox textOCR;
-        private System.Windows.Forms.Timer timerOCR;
         private NotifyIcon notifyIcon;
         private ContextMenuStrip iconMenu;
         private ToolStripMenuItem 显示ToolStripMenuItem;

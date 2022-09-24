@@ -1,9 +1,8 @@
-using AAAPrintScreen.Component;
 using OCR_PrintScreen;
 using PaddleOCRSharp;
 using System.Diagnostics;
 
-namespace AAAPrintScreen
+namespace OCR_PrintScreen
 {
     public partial class Main : Form
     {
@@ -120,20 +119,27 @@ namespace AAAPrintScreen
         /// <param name="imgfile"></param>
         private void showFileOcr(Image imgfile)
         {
-
-            //识别结果对象
-            var ocrResult = new OCRResult();
-            using PaddleOCREngine engine = new PaddleOCREngine(null, new OCRParameter());
-            ocrResult = engine.DetectText(imgfile);
-            if (ocrResult.TextBlocks.Count>0)
+            new Task(() =>
             {
-                textOCR.Text = "";
-                foreach (var item in ocrResult.TextBlocks)
+                //识别结果对象
+                var ocrResult = new OCRResult();
+                using PaddleOCREngine engine = new PaddleOCREngine(null, new OCRParameter());
+                ocrResult = engine.DetectText(imgfile);
+                var txt = "";
+                if (ocrResult.TextBlocks.Count > 0)
                 {
-                    textOCR.Text += item.Text+"\r\n";
+                    foreach (var item in ocrResult.TextBlocks)
+                    {
+                        txt += item.Text + "\r\n";
+                    }
                 }
-            }
-            textOCR.Cursor = Cursors.IBeam;
+                this.BeginInvoke(new Action(() =>
+                {
+                    if (!string.IsNullOrEmpty(txt) && txt != textOCR.Text) textOCR.Text = txt;
+                    textOCR.Cursor = Cursors.IBeam;
+                }));
+                
+            }).Start();
         }
 
         /// <summary>
@@ -141,14 +147,8 @@ namespace AAAPrintScreen
         /// </summary>
         private void timeOCR_Start() {
             textOCR.Cursor = Cursors.WaitCursor;
-            timerOCR.Enabled = true;
-        }
-        private void timerOCR_Tick(object sender, EventArgs e)
-        {
-            timerOCR.Enabled = false;
             showFileOcr(sqPhoto.Image);
         }
-
 
         private void notifyIcon_DoubleClick(object sender, EventArgs e)
         {

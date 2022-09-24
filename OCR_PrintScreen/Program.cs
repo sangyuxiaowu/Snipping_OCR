@@ -1,4 +1,4 @@
-using AAAPrintScreen;
+using OCR_PrintScreen;
 
 namespace OCR_PrintScreen
 {
