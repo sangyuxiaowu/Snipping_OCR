@@ -1,8 +1,8 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace AAAPrintScreen
+namespace OCR_PrintScreen
 {
-	internal class WindowsAPI
+    internal class WindowsAPI
     {
         /// <summary>
 		/// 设置指定窗口的显示状态

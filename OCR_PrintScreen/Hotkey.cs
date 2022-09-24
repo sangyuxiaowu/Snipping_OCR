@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace AAAPrintScreen
+namespace OCR_PrintScreen
 {
     /// <summary>
     /// 快捷键注册注销管理

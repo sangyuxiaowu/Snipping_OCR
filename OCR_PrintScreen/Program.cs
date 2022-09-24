@@ -1,4 +1,6 @@
-namespace AAAPrintScreen
+using AAAPrintScreen;
+
+namespace OCR_PrintScreen
 {
     internal static class Program
     {

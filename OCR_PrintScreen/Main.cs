@@ -1,4 +1,5 @@
 using AAAPrintScreen.Component;
+using OCR_PrintScreen;
 using PaddleOCRSharp;
 using System.Diagnostics;
 
