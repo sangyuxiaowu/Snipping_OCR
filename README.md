@@ -13,6 +13,7 @@ A simple desktop screenshot OCR tool for Windows platform, use the system's own 
 - Clipboard image recognition
 - Drag and drop
 
+<hr>
 
 - 离线使用
 - 中英文字符识别

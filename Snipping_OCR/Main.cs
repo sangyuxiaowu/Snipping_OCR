@@ -34,7 +34,7 @@ namespace Snipping_OCR
             //注册热键 Ctrl+ALT+A 截图
             try
             {
-                Hotkey.Regist(base.Handle, HotkeyModifiers.MOD_CONTROL_ALT, Keys.A, new Hotkey.HotKeyCallBackHanlder(StartCaptureAsync));
+                Hotkey.Regist(base.Handle, HotkeyModifiers.MOD_CONTROL_ALT, Keys.A, new Hotkey.HotKeyCallBackHanlder(StartCapture));
             }
             catch
             {
@@ -52,7 +52,7 @@ namespace Snipping_OCR
         {
             try
             {
-                Hotkey.UnRegist(base.Handle, new Hotkey.HotKeyCallBackHanlder(StartCaptureAsync));
+                Hotkey.UnRegist(base.Handle, new Hotkey.HotKeyCallBackHanlder(StartCapture));
             }
             catch
             {
@@ -65,7 +65,7 @@ namespace Snipping_OCR
         /// <summary>
         /// 调用系统截图处理
         /// </summary>
-        private void StartCaptureAsync()
+        private void StartCapture()
         {
             // 隐藏
             this.WindowState = FormWindowState.Minimized;
@@ -107,6 +107,8 @@ namespace Snipping_OCR
             }));
         }
 
+        private readonly string[] ImgAllow = new string[] { "jpg", "png", "gif", "peg", "bmp" };
+
         /// <summary>
         /// 从剪切板获取图片并识别
         /// </summary>
@@ -122,11 +124,16 @@ namespace Snipping_OCR
                 return;
             }
 
+            // 直接复制的图片文件
             var files = Clipboard.GetFileDropList();
             if (files.Count > 0)
             {
-                sqPhoto.Image = Image.FromFile(files[0]!);
-                timeOCR_Start();
+                string ext = files[0].ToLower().Substring(files[0].Length - 3);
+                if (ImgAllow.Contains(ext))
+                {
+                    sqPhoto.Image = Image.FromFile(files[0]);
+                    timeOCR_Start();
+                }
             }
         }
 
@@ -137,10 +144,9 @@ namespace Snipping_OCR
         /// <param name="e"></param>
         private void sqPhoto_DragDrop(object sender, DragEventArgs e)
         {
-            string[] allow = new string[] { "jpg", "png", "gif", "peg", "bmp" };
-            string file = ((System.Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString();
+            string file = ((System.Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString()!;
             string ext = file.ToLower().Substring(file.Length - 3);
-            if (allow.Contains(ext))
+            if (ImgAllow.Contains(ext))
             {
                 sqPhoto.Image = Image.FromFile(file);
                 timeOCR_Start();
@@ -229,6 +235,9 @@ namespace Snipping_OCR
             WindowsAPI.ShowWindow(this.Handle, 9);
         }
 
-        
+        private void 开始截图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StartCapture();
+        }
     }
 }
