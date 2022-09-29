@@ -1,8 +1,10 @@
-using OCR_PrintScreen;
 using PaddleOCRSharp;
+using Snipping_OCR;
 using System.Diagnostics;
+using System.Security.Policy;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace OCR_PrintScreen
+namespace Snipping_OCR
 {
     public partial class Main : Form
     {
@@ -30,7 +32,32 @@ namespace OCR_PrintScreen
         private void Main_Load(object sender, EventArgs e)
         {
             //注册热键 Ctrl+ALT+A 截图
-            Hotkey.Regist(base.Handle, HotkeyModifiers.MOD_CONTROL_ALT, Keys.A, new Hotkey.HotKeyCallBackHanlder(StartCapture));
+            try
+            {
+                Hotkey.Regist(base.Handle, HotkeyModifiers.MOD_CONTROL_ALT, Keys.A, new Hotkey.HotKeyCallBackHanlder(StartCaptureAsync));
+            }
+            catch
+            {
+                notifyIcon.ShowBalloonTip(2, "屏幕 OCR", "热键注册失败，您仍可以使用其他方式执行 OCR。",ToolTipIcon.Info);
+            }
+            
+        }
+
+        /// <summary>
+        /// 关闭，卸载热键
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Main_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            try
+            {
+                Hotkey.UnRegist(base.Handle, new Hotkey.HotKeyCallBackHanlder(StartCaptureAsync));
+            }
+            catch
+            {
+
+            }
         }
 
 
@@ -38,11 +65,24 @@ namespace OCR_PrintScreen
         /// <summary>
         /// 调用系统截图处理
         /// </summary>
-        private void StartCapture()
+        private void StartCaptureAsync()
         {
             // 隐藏
             this.WindowState = FormWindowState.Minimized;
             this.Hide();
+
+            var psi = new ProcessStartInfo()
+            {
+                UseShellExecute = true,
+                FileName = "ms-screenclip:"
+            };
+            Process.Start(psi);
+
+            var snippingToolProcess = Process.GetProcessesByName("ScreenClippingHost")[0];
+            snippingToolProcess.EnableRaisingEvents = true;
+            snippingToolProcess.Exited += SnippingToolProcess_Exited;
+
+            /*
             Process snippingToolProcess = new Process()
             {
                 StartInfo = new ProcessStartInfo("C:\\Windows\\system32\\SnippingTool.exe", "/clip"),
@@ -50,6 +90,7 @@ namespace OCR_PrintScreen
             };
             snippingToolProcess.Exited += SnippingToolProcess_Exited;
             snippingToolProcess.Start();
+            */
         }
 
         /// <summary>
@@ -59,6 +100,7 @@ namespace OCR_PrintScreen
         /// <param name="e"></param>
         private void SnippingToolProcess_Exited(object? sender, EventArgs e)
         {
+            Debug.WriteLine("触发了已经");
             this.BeginInvoke(new Action(() =>
             {
                 ClipboardOCR();
@@ -73,10 +115,19 @@ namespace OCR_PrintScreen
 
             WindowsAPI.ShowWindow(this.Handle, 9);
             var img = Clipboard.GetImage();
-            if (img == null) return;
-            sqPhoto.Image = img;
-            timeOCR_Start();
 
+            if (img != null) {
+                sqPhoto.Image = img;
+                timeOCR_Start();
+                return;
+            }
+
+            var files = Clipboard.GetFileDropList();
+            if (files.Count > 0)
+            {
+                sqPhoto.Image = Image.FromFile(files[0]!);
+                timeOCR_Start();
+            }
         }
 
         /// <summary>
@@ -177,5 +228,7 @@ namespace OCR_PrintScreen
         {
             WindowsAPI.ShowWindow(this.Handle, 9);
         }
+
+        
     }
 }

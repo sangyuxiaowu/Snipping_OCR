@@ -18,7 +18,13 @@
 
   <ItemGroup>
     <PackageReference Include="PaddleOCRSharp" Version="2.0.4" />
-    <PackageReference Include="SQPhoto" Version="1.0.0" />
+    <PackageReference Include="SQPhoto" Version="1.0.1" />
   </ItemGroup>
 
+	<ItemGroup>
+		<Folder Include="doc\" />
+		<None Include="..\README.md" Link="doc\README.md" />
+		<None Include="..\LICENSE.txt" Link="doc\LICENSE.txt" />
+	</ItemGroup>
+	
 </Project>

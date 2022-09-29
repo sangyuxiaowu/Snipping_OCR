@@ -1,6 +1,6 @@
-using OCR_PrintScreen;
+using Snipping_OCR;
 
-namespace OCR_PrintScreen
+namespace Snipping_OCR
 {
     internal static class Program
     {

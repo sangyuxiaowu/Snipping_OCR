@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace OCR_PrintScreen
+namespace Snipping_OCR
 {
     internal class WindowsAPI
     {

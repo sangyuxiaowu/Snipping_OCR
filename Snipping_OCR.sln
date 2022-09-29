@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OCR_PrintScreen", "OCR_PrintScreen\OCR_PrintScreen.csproj", "{EDDE6D58-EF83-4C43-9DCF-35347DC3466E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snipping_OCR", "Snipping_OCR\Snipping_OCR.csproj", "{EDDE6D58-EF83-4C43-9DCF-35347DC3466E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
