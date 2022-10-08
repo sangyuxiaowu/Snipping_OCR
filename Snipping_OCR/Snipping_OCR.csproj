@@ -8,7 +8,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
 	<Authors>SangSQ(桑世强)</Authors>
   </PropertyGroup>
 
@@ -22,7 +22,7 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="doc\" />
+		<Folder Include="..\doc\" />
 		<None Include="..\README.md" Link="doc\README.md" />
 		<None Include="..\LICENSE.txt" Link="doc\LICENSE.txt" />
 	</ItemGroup>

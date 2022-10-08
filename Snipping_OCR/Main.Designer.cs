@@ -114,33 +114,33 @@
             this.识别剪贴板ToolStripMenuItem,
             this.退出软件ToolStripMenuItem});
             this.iconMenu.Name = "iconMenu";
-            this.iconMenu.Size = new System.Drawing.Size(181, 114);
+            this.iconMenu.Size = new System.Drawing.Size(137, 92);
             // 
             // 显示ToolStripMenuItem
             // 
             this.显示ToolStripMenuItem.Name = "显示ToolStripMenuItem";
-            this.显示ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.显示ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.显示ToolStripMenuItem.Text = "显示界面";
             this.显示ToolStripMenuItem.Click += new System.EventHandler(this.显示ToolStripMenuItem_Click);
             // 
             // 开始截图ToolStripMenuItem
             // 
             this.开始截图ToolStripMenuItem.Name = "开始截图ToolStripMenuItem";
-            this.开始截图ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.开始截图ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.开始截图ToolStripMenuItem.Text = "开始截图";
             this.开始截图ToolStripMenuItem.Click += new System.EventHandler(this.开始截图ToolStripMenuItem_Click);
             // 
             // 识别剪贴板ToolStripMenuItem
             // 
             this.识别剪贴板ToolStripMenuItem.Name = "识别剪贴板ToolStripMenuItem";
-            this.识别剪贴板ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.识别剪贴板ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.识别剪贴板ToolStripMenuItem.Text = "识别剪贴板";
             this.识别剪贴板ToolStripMenuItem.Click += new System.EventHandler(this.识别剪贴板ToolStripMenuItem_Click);
             // 
             // 退出软件ToolStripMenuItem
             // 
             this.退出软件ToolStripMenuItem.Name = "退出软件ToolStripMenuItem";
-            this.退出软件ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.退出软件ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.退出软件ToolStripMenuItem.Text = "退出软件";
             this.退出软件ToolStripMenuItem.Click += new System.EventHandler(this.退出软件ToolStripMenuItem_Click);
             // 
@@ -150,8 +150,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 461);
             this.Controls.Add(this.splitContainer);
-            this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(800, 500);
             this.MinimumSize = new System.Drawing.Size(800, 500);
             this.Name = "Main";
             this.ShowInTaskbar = false;

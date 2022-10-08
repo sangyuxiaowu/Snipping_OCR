@@ -6,6 +6,10 @@ A simple desktop screenshot OCR tool for Windows platform, use the system's own 
 
 已经测试过 Win10 和 Win11，不支持 Win7。
 
+<p align="center">
+  <img src="./doc/6.png">
+</p>
+
 # Features
 
 - Software supports offline use
