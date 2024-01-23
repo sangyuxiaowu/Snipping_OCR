@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net6.0-windows;net7.0-windows</TargetFrameworks>
+    <TargetFrameworks>net8.0-windows10.0.17763.0</TargetFrameworks>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
-    <Version>1.0.1</Version>
+    <Version>1.1.2</Version>
 	<Authors>SangSQ(桑世强)</Authors>
   </PropertyGroup>
 
@@ -17,13 +17,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PaddleOCRSharp" Version="2.2.0" />
+    <PackageReference Include="PaddleOCRSharp" Version="4.1.0" />
     <PackageReference Include="SQPhoto" Version="1.0.2" />
   </ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="..\doc\" />
 		<None Include="..\README.md" Link="doc\README.md" />
+		<None Include="..\README_zh.md" Link="doc\README_zh.md" />
 		<None Include="..\LICENSE.txt" Link="doc\LICENSE.txt" />
 	</ItemGroup>
 	

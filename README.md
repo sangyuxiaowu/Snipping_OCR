@@ -1,38 +1,31 @@
 ﻿# Snipping_OCR
 
-A simple desktop screenshot OCR tool for Windows platform, use the system's own screenshot tool to take screenshots, use PaddleOCRSharp for OCR recognition, and support Chinese and English OCR character recognition.
+Snipping_OCR is a straightforward desktop screenshot OCR tool designed for the Windows platform. It utilizes the system's built-in screenshot tool for capturing images and PaddleOCRSharp for OCR recognition. The software supports OCR character recognition in both Chinese and English.
 
-一个适用于 Windows 平台的简单桌面截图 OCR 工具，使用系统自带截图工具截图，使用 PaddleOCRSharp 来进行 OCR 识别，支持中英文的 OCR 字符识别。
+English | [简体中文](./README_zh.md)
 
-已经测试过 Win10 和 Win11，不支持 Win7。
+The tool has been tested on Windows 10 and Windows 11. Please note that it does not support Windows 7.
 
 <p align="center">
   <img src="./doc/6.png">
 </p>
 
-# Features
+## Features
 
-- Software supports offline use
-- Chinese and English support
-- Clipboard image recognition
-- Drag and drop
+- Supports offline usage
+- Recognizes Chinese and English characters
+- Recognizes clipboard images
+- Allows drag and drop
 
-<hr>
+## Installation
 
-- 离线使用
-- 中英文字符识别
-- 剪切板识别
-- 支持拖拽
+You can download and unzip the software from the repository's Releases. No installation is required. We provide standalone versions for windows and versions dependent on the .NET6 framework. For the framework-dependent version, you need to install the [.NET8 runtime](https://dotnet.microsoft.com/zh-cn/download/dotnet/8.0).
 
-# Installation
+## Usage
 
-在仓库的 Releases 下载解压使用即可，无需安装。提供有 windows 的对立版本和 .NET6 框架依赖版本。框架依赖版本需要安装 [.NET6 运行时](https://dotnet.microsoft.com/zh-cn/download/dotnet/6.0)。
-
-# Usage
-
-1. 双击 `Snipping_OCR.exe`启动软件。
-2. 最小化将最小化到托盘，关闭为退出软件。
-3. 使用快捷键 `Ctrl + Alt + A`启动截图。
-4. 若快捷无法正常使用，可以使用其他软件或者系统自带的截图工具 “Win + Shift + S”截图后，在托盘使用右键菜单 “识别剪贴板”来进行 OCR 识别
-5. 可以将图片拖放到左边空白区域来识别
-6. 复制图片文件后也可以在托盘使用右键菜单 “识别剪贴板”来进行 OCR 识别
+1. Double-click `Snipping_OCR.exe` to launch the software.
+2. Minimizing the software will minimize it to the tray, while closing it will exit the software.
+3. Use the `Ctrl + Tab` shortcut to initiate a screenshot.
+4. If the shortcut cannot be used normally, you can use other software or the system's built-in screenshot tool “Win + Shift + S” to take a screenshot. Then, use the right-click menu "Recognize Clipboard" in the tray to perform OCR recognition.
+5. You can drag and drop images into the left blank area for recognition.
+6. After copying an image file, you can also use the right-click menu "Recognize Clipboard" in the tray to perform OCR recognition.

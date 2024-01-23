@@ -1,8 +1,6 @@
 using PaddleOCRSharp;
-using Snipping_OCR;
 using System.Diagnostics;
-using System.Security.Policy;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Drawing.Imaging;
 
 namespace Snipping_OCR
 {
@@ -13,6 +11,9 @@ namespace Snipping_OCR
         {
             InitializeComponent();
         }
+
+        private PaddleOCREngine engine;
+
 
         /// <summary>
         /// 覆写窗体消息
@@ -31,16 +32,21 @@ namespace Snipping_OCR
         /// <param name="e"></param>
         private void Main_Load(object sender, EventArgs e)
         {
-            //注册热键 Ctrl+ALT+A 截图
+            //注册热键 Ctrl+TAB 截图
             try
             {
-                Hotkey.Regist(base.Handle, HotkeyModifiers.MOD_CONTROL_ALT, Keys.A, new Hotkey.HotKeyCallBackHanlder(StartCapture));
+                Hotkey.Regist(base.Handle, HotkeyModifiers.MOD_CONTROL, Keys.Tab, new Hotkey.HotKeyCallBackHanlder(StartCapture));
             }
             catch
             {
                 notifyIcon.ShowBalloonTip(2, "屏幕 OCR", "热键注册失败，您仍可以使用其他方式执行 OCR。",ToolTipIcon.Info);
             }
-            
+
+            OCRParameter oCRParameter = new()
+            {
+                use_gpu = true,
+            };
+            engine = new(null, oCRParameter);
         }
 
         /// <summary>
@@ -82,15 +88,6 @@ namespace Snipping_OCR
             snippingToolProcess.EnableRaisingEvents = true;
             snippingToolProcess.Exited += SnippingToolProcess_Exited;
 
-            /*
-            Process snippingToolProcess = new Process()
-            {
-                StartInfo = new ProcessStartInfo("C:\\Windows\\system32\\SnippingTool.exe", "/clip"),
-                EnableRaisingEvents = true,
-            };
-            snippingToolProcess.Exited += SnippingToolProcess_Exited;
-            snippingToolProcess.Start();
-            */
         }
 
         /// <summary>
@@ -100,7 +97,6 @@ namespace Snipping_OCR
         /// <param name="e"></param>
         private void SnippingToolProcess_Exited(object? sender, EventArgs e)
         {
-            Debug.WriteLine("触发了已经");
             this.BeginInvoke(new Action(() =>
             {
                 ClipboardOCR();
@@ -176,27 +172,29 @@ namespace Snipping_OCR
         /// <param name="imgfile"></param>
         private void showFileOcr(Image imgfile)
         {
-            new Task(() =>
+            //识别结果对象
+            var ocrResult = new OCRResult();
+            ocrResult = engine.DetectText(ImageToBytes(imgfile));
+            var txt = "";
+            if (ocrResult.TextBlocks.Count > 0)
             {
-                //识别结果对象
-                var ocrResult = new OCRResult();
-                using PaddleOCREngine engine = new PaddleOCREngine(null, new OCRParameter());
-                ocrResult = engine.DetectText(imgfile);
-                var txt = "";
-                if (ocrResult.TextBlocks.Count > 0)
+                foreach (var item in ocrResult.TextBlocks)
                 {
-                    foreach (var item in ocrResult.TextBlocks)
-                    {
-                        txt += item.Text + "\r\n";
-                    }
+                    txt += item.Text + "\r\n";
                 }
-                this.BeginInvoke(new Action(() =>
-                {
-                    if (!string.IsNullOrEmpty(txt) && txt != textOCR.Text) textOCR.Text = txt;
-                    textOCR.Cursor = Cursors.IBeam;
-                }));
-                
-            }).Start();
+            }
+            this.BeginInvoke(new Action(() =>
+            {
+                if (!string.IsNullOrEmpty(txt) && txt != textOCR.Text) textOCR.Text = txt;
+                textOCR.Cursor = Cursors.IBeam;
+            }));
+        }
+
+        private byte[] ImageToBytes(Image img)
+        {
+            MemoryStream ms = new MemoryStream();
+            img.Save(ms, ImageFormat.Jpeg);
+            return ms.ToArray();
         }
 
         /// <summary>
