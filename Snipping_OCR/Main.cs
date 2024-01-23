@@ -34,13 +34,14 @@ namespace Snipping_OCR
             //注册热键 Ctrl+ALT+A 截图
             try
             {
-                Hotkey.Regist(base.Handle, HotkeyModifiers.MOD_CONTROL_ALT, Keys.A, new Hotkey.HotKeyCallBackHanlder(StartCapture));
+                toolStripComboBox1.Text = "否";
+                Hotkey.Regist(base.Handle, HotkeyModifiers.MOD_CONTROL_ALT, Keys.Q, new Hotkey.HotKeyCallBackHanlder(StartCapture));
             }
             catch
             {
-                notifyIcon.ShowBalloonTip(2, "屏幕 OCR", "热键注册失败，您仍可以使用其他方式执行 OCR。",ToolTipIcon.Info);
+                notifyIcon.ShowBalloonTip(2, "屏幕 OCR", "热键注册失败，您仍可以使用其他方式执行 OCR。", ToolTipIcon.Info);
             }
-            
+
         }
 
         /// <summary>
@@ -65,7 +66,7 @@ namespace Snipping_OCR
         /// <summary>
         /// 调用系统截图处理
         /// </summary>
-        private void StartCapture()
+        private async void StartCapture()
         {
             // 隐藏
             this.WindowState = FormWindowState.Minimized;
@@ -82,7 +83,7 @@ namespace Snipping_OCR
             var snippingToolProcess = Process.GetProcessesByName("ScreenClippingHost");
             var postLaunchProcesses3 = postLaunchProcesses.Concat(snippingToolProcess);
             var sinpping = postLaunchProcesses3.FirstOrDefault();
-            if (sinpping!=null)
+            if (sinpping != null)
             {
                 await sinpping.WaitForExitAsync();
                 ClipboardOCR();
@@ -114,7 +115,8 @@ namespace Snipping_OCR
             WindowsAPI.ShowWindow(this.Handle, 9);
             var img = Clipboard.GetImage();
 
-            if (img != null) {
+            if (img != null)
+            {
                 sqPhoto.Image = img;
                 timeOCR_Start();
                 return;
@@ -172,6 +174,7 @@ namespace Snipping_OCR
         /// <param name="imgfile"></param>
         private void showFileOcr(Image imgfile)
         {
+            var isfanyi = toolStripComboBox1.Text.Equals("是");
             new Task(() =>
             {
                 //识别结果对象
@@ -188,17 +191,34 @@ namespace Snipping_OCR
                 }
                 this.BeginInvoke(new Action(() =>
                 {
-                    if (!string.IsNullOrEmpty(txt) && txt != textOCR.Text) textOCR.Text = txt;
+                    if (!string.IsNullOrEmpty(txt) && txt != textOCR.Text)
+                    {
+                        textOCR.Text = txt;
+                    }
                     textOCR.Cursor = Cursors.IBeam;
                 }));
-                
+                if (isfanyi)
+                {
+                    var fanyi = BaiduTransHelper.Trans(txt);
+                    txt += $"翻译:\r\n{fanyi}";
+                    this.BeginInvoke(new Action(() =>
+                    {
+                        if (!string.IsNullOrEmpty(txt) && txt != textOCR.Text)
+                        {
+                            textOCR.Text = txt;
+                        }
+                        textOCR.Cursor = Cursors.IBeam;
+                    }));
+                }
+
             }).Start();
         }
 
         /// <summary>
         /// 启动识别
         /// </summary>
-        private void timeOCR_Start() {
+        private void timeOCR_Start()
+        {
             textOCR.Cursor = Cursors.WaitCursor;
             showFileOcr(sqPhoto.Image);
         }
@@ -210,7 +230,7 @@ namespace Snipping_OCR
 
         private void Main_SizeChanged(object sender, EventArgs e)
         {
-            if(this.WindowState == FormWindowState.Minimized)
+            if (this.WindowState == FormWindowState.Minimized)
             {
                 this.Hide();
             }
@@ -234,6 +254,23 @@ namespace Snipping_OCR
         private void 开始截图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             StartCapture();
+        }
+
+        private void btn_tls_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+        }
+
+        private void toolStripTextBox2_Click(object sender, EventArgs e)
+        {
+            new Task(() =>
+            {
+                var fanyi = BaiduTransHelper.Trans(textOCR.Text);
+                this.BeginInvoke(new Action(() =>
+                {
+                    textOCR.Text = fanyi;
+                }));
+            }).Start();
         }
     }
 }
