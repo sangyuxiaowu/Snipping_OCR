@@ -71,7 +71,7 @@ namespace Snipping_OCR
         /// <summary>
         /// 调用系统截图处理
         /// </summary>
-        private void StartCapture()
+        private async void StartCapture()
         {
             // 隐藏
             this.WindowState = FormWindowState.Minimized;
@@ -84,23 +84,15 @@ namespace Snipping_OCR
             };
             Process.Start(psi);
 
-            var snippingToolProcess = Process.GetProcessesByName("ScreenClippingHost")[0];
-            snippingToolProcess.EnableRaisingEvents = true;
-            snippingToolProcess.Exited += SnippingToolProcess_Exited;
-
-        }
-
-        /// <summary>
-        /// 截图完成
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void SnippingToolProcess_Exited(object? sender, EventArgs e)
-        {
-            this.BeginInvoke(new Action(() =>
+            var postLaunchProcesses = Process.GetProcessesByName("SnippingTool");
+            var snippingToolProcess = Process.GetProcessesByName("ScreenClippingHost");
+            var postLaunchProcesses3 = postLaunchProcesses.Concat(snippingToolProcess);
+            var sinpping = postLaunchProcesses3.FirstOrDefault();
+            if (sinpping != null)
             {
+                await sinpping.WaitForExitAsync();
                 ClipboardOCR();
-            }));
+            }
         }
 
         private readonly string[] ImgAllow = new string[] { "jpg", "png", "gif", "peg", "bmp" };
@@ -114,7 +106,8 @@ namespace Snipping_OCR
             WindowsAPI.ShowWindow(this.Handle, 9);
             var img = Clipboard.GetImage();
 
-            if (img != null) {
+            if (img != null)
+            {
                 sqPhoto.Image = img;
                 timeOCR_Start();
                 return;
@@ -200,7 +193,8 @@ namespace Snipping_OCR
         /// <summary>
         /// 启动识别
         /// </summary>
-        private void timeOCR_Start() {
+        private void timeOCR_Start()
+        {
             textOCR.Cursor = Cursors.WaitCursor;
             showFileOcr(sqPhoto.Image);
         }
@@ -212,7 +206,7 @@ namespace Snipping_OCR
 
         private void Main_SizeChanged(object sender, EventArgs e)
         {
-            if(this.WindowState == FormWindowState.Minimized)
+            if (this.WindowState == FormWindowState.Minimized)
             {
                 this.Hide();
             }
