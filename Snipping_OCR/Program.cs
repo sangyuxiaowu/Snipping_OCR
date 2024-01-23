@@ -1,4 +1,4 @@
-using Snipping_OCR;
+﻿using Snipping_OCR;
 
 namespace Snipping_OCR
 {

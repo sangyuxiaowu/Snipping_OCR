@@ -1,4 +1,4 @@
-using PaddleOCRSharp;
+ï»¿using PaddleOCRSharp;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 
@@ -16,7 +16,7 @@ namespace Snipping_OCR
 
 
         /// <summary>
-        /// ¸²Ğ´´°ÌåÏûÏ¢
+        /// è¦†å†™çª—ä½“æ¶ˆæ¯
         /// </summary>
         /// <param name="m"></param>
         protected override void WndProc(ref Message m)
@@ -26,20 +26,20 @@ namespace Snipping_OCR
         }
 
         /// <summary>
-        /// Æô¶¯£¬×¢²áÈÈ¼ü
+        /// å¯åŠ¨ï¼Œæ³¨å†Œçƒ­é”®
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Main_Load(object sender, EventArgs e)
         {
-            //×¢²áÈÈ¼ü Ctrl+TAB ½ØÍ¼
+            //æ³¨å†Œçƒ­é”® Ctrl+TAB æˆªå›¾
             try
             {
                 Hotkey.Regist(base.Handle, HotkeyModifiers.MOD_CONTROL, Keys.Tab, new Hotkey.HotKeyCallBackHanlder(StartCapture));
             }
             catch
             {
-                notifyIcon.ShowBalloonTip(2, "ÆÁÄ» OCR", "ÈÈ¼ü×¢²áÊ§°Ü£¬ÄúÈÔ¿ÉÒÔÊ¹ÓÃÆäËû·½Ê½Ö´ĞĞ OCR¡£",ToolTipIcon.Info);
+                notifyIcon.ShowBalloonTip(2, "å±å¹• OCR", "çƒ­é”®æ³¨å†Œå¤±è´¥ï¼Œæ‚¨ä»å¯ä»¥ä½¿ç”¨å…¶ä»–æ–¹å¼æ‰§è¡Œ OCRã€‚",ToolTipIcon.Info);
             }
 
             OCRParameter oCRParameter = new()
@@ -50,7 +50,7 @@ namespace Snipping_OCR
         }
 
         /// <summary>
-        /// ¹Ø±Õ£¬Ğ¶ÔØÈÈ¼ü
+        /// å…³é—­ï¼Œå¸è½½çƒ­é”®
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -69,11 +69,11 @@ namespace Snipping_OCR
 
 
         /// <summary>
-        /// µ÷ÓÃÏµÍ³½ØÍ¼´¦Àí
+        /// è°ƒç”¨ç³»ç»Ÿæˆªå›¾å¤„ç†
         /// </summary>
         private void StartCapture()
         {
-            // Òş²Ø
+            // éšè—
             this.WindowState = FormWindowState.Minimized;
             this.Hide();
 
@@ -91,7 +91,7 @@ namespace Snipping_OCR
         }
 
         /// <summary>
-        /// ½ØÍ¼Íê³É
+        /// æˆªå›¾å®Œæˆ
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -106,7 +106,7 @@ namespace Snipping_OCR
         private readonly string[] ImgAllow = new string[] { "jpg", "png", "gif", "peg", "bmp" };
 
         /// <summary>
-        /// ´Ó¼ôÇĞ°å»ñÈ¡Í¼Æ¬²¢Ê¶±ğ
+        /// ä»å‰ªåˆ‡æ¿è·å–å›¾ç‰‡å¹¶è¯†åˆ«
         /// </summary>
         private void ClipboardOCR()
         {
@@ -120,7 +120,7 @@ namespace Snipping_OCR
                 return;
             }
 
-            // Ö±½Ó¸´ÖÆµÄÍ¼Æ¬ÎÄ¼ş
+            // ç›´æ¥å¤åˆ¶çš„å›¾ç‰‡æ–‡ä»¶
             var files = Clipboard.GetFileDropList();
             if (files.Count > 0)
             {
@@ -134,7 +134,7 @@ namespace Snipping_OCR
         }
 
         /// <summary>
-        /// ÍÏ·ÅÍ¼Æ¬
+        /// æ‹–æ”¾å›¾ç‰‡
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -150,7 +150,7 @@ namespace Snipping_OCR
         }
 
         /// <summary>
-        /// ÔÊĞíÍÏ·Å
+        /// å…è®¸æ‹–æ”¾
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -167,12 +167,12 @@ namespace Snipping_OCR
         }
 
         /// <summary>
-        /// Ö´ĞĞOCRÊ¶±ğÍ¼Æ¬
+        /// æ‰§è¡ŒOCRè¯†åˆ«å›¾ç‰‡
         /// </summary>
         /// <param name="imgfile"></param>
         private void showFileOcr(Image imgfile)
         {
-            //Ê¶±ğ½á¹û¶ÔÏó
+            //è¯†åˆ«ç»“æœå¯¹è±¡
             var ocrResult = new OCRResult();
             ocrResult = engine.DetectText(ImageToBytes(imgfile));
             var txt = "";
@@ -198,7 +198,7 @@ namespace Snipping_OCR
         }
 
         /// <summary>
-        /// Æô¶¯Ê¶±ğ
+        /// å¯åŠ¨è¯†åˆ«
         /// </summary>
         private void timeOCR_Start() {
             textOCR.Cursor = Cursors.WaitCursor;
@@ -218,22 +218,22 @@ namespace Snipping_OCR
             }
         }
 
-        private void ÍË³öÈí¼şToolStripMenuItem_Click(object sender, EventArgs e)
+        private void é€€å‡ºè½¯ä»¶ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Environment.Exit(0);
         }
 
-        private void Ê¶±ğ¼ôÌù°åToolStripMenuItem_Click(object sender, EventArgs e)
+        private void è¯†åˆ«å‰ªè´´æ¿ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ClipboardOCR();
         }
 
-        private void ÏÔÊ¾ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void æ˜¾ç¤ºToolStripMenuItem_Click(object sender, EventArgs e)
         {
             WindowsAPI.ShowWindow(this.Handle, 9);
         }
 
-        private void ¿ªÊ¼½ØÍ¼ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void å¼€å§‹æˆªå›¾ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             StartCapture();
         }
