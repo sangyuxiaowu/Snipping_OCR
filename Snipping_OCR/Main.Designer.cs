@@ -104,7 +104,7 @@
             // notifyIcon
             // 
             notifyIcon.ContextMenuStrip = iconMenu;
-            notifyIcon.Icon = (Icon)resources.GetObject("notifyIcon.Icon");
+            notifyIcon.Icon = (Icon)resources.GetObject("$this.Icon");
             notifyIcon.Text = "截图 OCR";
             notifyIcon.Visible = true;
             notifyIcon.DoubleClick += notifyIcon_DoubleClick;
