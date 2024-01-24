@@ -41,6 +41,7 @@ namespace Snipping_OCR
         /// <param name="e"></param>
         private void Main_Load(object sender, EventArgs e)
         {
+            // 根据操作系统自动设置语言
             CultureInfo currentCulture = CultureInfo.CurrentCulture;
             if (currentCulture.TwoLetterISOLanguageName == "zh")
             {
@@ -59,7 +60,7 @@ namespace Snipping_OCR
             }
             catch
             {
-                notifyIcon.ShowBalloonTip(2, "ocr", "热键注册失败，您仍可以使用其他方式执行 OCR。", ToolTipIcon.Info);
+                notifyIcon.ShowBalloonTip(2, Resources.ScreenOCR, Resources.HotkeyRegistrationFailed, ToolTipIcon.Info);
             }
 
             OCRParameter oCRParameter = new()
@@ -279,7 +280,7 @@ namespace Snipping_OCR
             this.splitContainer.Panel1Collapsed = isFocus;
             this.Opacity = isFocus ? 0.9 : 1;
             this.textOCR.BackColor = isFocus ? Color.FromArgb(227, 237, 205) : Color.White;
-            this.Text = isFocus ? "Snipping OCR - 专注模式" : "Snipping OCR";
+            this.Text = isFocus ? $"Snipping OCR - {Resources.FocusMode}" : "Snipping OCR";
             this.开启ToolStripMenuItem.Checked = isFocus;
             this.关闭ToolStripMenuItem.Checked = !isFocus;
         }

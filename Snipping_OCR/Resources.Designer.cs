@@ -70,6 +70,15 @@ namespace Snipping_OCR {
         }
         
         /// <summary>
+        ///   查找类似 Focus Mode 的本地化字符串。
+        /// </summary>
+        internal static string FocusMode {
+            get {
+                return ResourceManager.GetString("FocusMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Hotkey registration failed, you can still use other methods to Hotkey registration failed, you can still use other methods to perform OCR. 的本地化字符串。
         /// </summary>
         internal static string HotkeyRegistrationFailed {
@@ -88,7 +97,7 @@ namespace Snipping_OCR {
         }
         
         /// <summary>
-        ///   查找类似 Screen OCR 的本地化字符串。
+        ///   查找类似 Snipping OCR 的本地化字符串。
         /// </summary>
         internal static string ScreenOCR {
             get {
@@ -111,6 +120,24 @@ namespace Snipping_OCR {
         internal static string StartScreenshot {
             get {
                 return ResourceManager.GetString("StartScreenshot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Turn Off 的本地化字符串。
+        /// </summary>
+        internal static string TF {
+            get {
+                return ResourceManager.GetString("TF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Turn On 的本地化字符串。
+        /// </summary>
+        internal static string TO {
+            get {
+                return ResourceManager.GetString("TO", resourceCulture);
             }
         }
     }
