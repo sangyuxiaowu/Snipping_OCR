@@ -52,6 +52,8 @@ namespace Snipping_OCR
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
             }
 
+            this.Icon = notifyIcon.Icon;
+
 
             //注册热键 Ctrl+TAB 截图
             try

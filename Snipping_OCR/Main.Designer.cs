@@ -32,8 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             splitContainer = new SplitContainer();
             sqPhoto = new SQPhoto.SQPhoto();
-            textOCR = new TextBox();
-            notifyIcon = new NotifyIcon(components);
             iconMenu = new ContextMenuStrip(components);
             显示ToolStripMenuItem = new ToolStripMenuItem();
             开始截图ToolStripMenuItem = new ToolStripMenuItem();
@@ -42,6 +40,8 @@
             开启ToolStripMenuItem = new ToolStripMenuItem();
             关闭ToolStripMenuItem = new ToolStripMenuItem();
             退出软件ToolStripMenuItem = new ToolStripMenuItem();
+            textOCR = new TextBox();
+            notifyIcon = new NotifyIcon(components);
             ((System.ComponentModel.ISupportInitialize)splitContainer).BeginInit();
             splitContainer.Panel1.SuspendLayout();
             splitContainer.Panel2.SuspendLayout();
@@ -76,6 +76,7 @@
             sqPhoto.CanMove = true;
             sqPhoto.CanReSize = true;
             sqPhoto.CanZoom = true;
+            sqPhoto.ContextMenuStrip = iconMenu;
             sqPhoto.Dock = DockStyle.Fill;
             sqPhoto.Image = null;
             sqPhoto.Location = new Point(0, 0);
@@ -88,6 +89,63 @@
             sqPhoto.ZoomMin = 100;
             sqPhoto.DragDrop += sqPhoto_DragDrop;
             sqPhoto.DragEnter += sqPhoto_DragEnter;
+            // 
+            // iconMenu
+            // 
+            iconMenu.Items.AddRange(new ToolStripItem[] { 显示ToolStripMenuItem, 开始截图ToolStripMenuItem, 识别剪贴板ToolStripMenuItem, 专注模式ToolStripMenuItem, 退出软件ToolStripMenuItem });
+            iconMenu.Name = "iconMenu";
+            iconMenu.Size = new Size(197, 114);
+            // 
+            // 显示ToolStripMenuItem
+            // 
+            显示ToolStripMenuItem.Name = "显示ToolStripMenuItem";
+            显示ToolStripMenuItem.Size = new Size(196, 22);
+            显示ToolStripMenuItem.Text = Resources.ShowInterface;
+            显示ToolStripMenuItem.Click += 显示ToolStripMenuItem_Click;
+            // 
+            // 开始截图ToolStripMenuItem
+            // 
+            开始截图ToolStripMenuItem.Name = "开始截图ToolStripMenuItem";
+            开始截图ToolStripMenuItem.Size = new Size(196, 22);
+            开始截图ToolStripMenuItem.Text = Resources.StartScreenshot;
+            开始截图ToolStripMenuItem.Click += 开始截图ToolStripMenuItem_Click;
+            // 
+            // 识别剪贴板ToolStripMenuItem
+            // 
+            识别剪贴板ToolStripMenuItem.Name = "识别剪贴板ToolStripMenuItem";
+            识别剪贴板ToolStripMenuItem.Size = new Size(196, 22);
+            识别剪贴板ToolStripMenuItem.Text = Resources.RecognizeClipboard;
+            识别剪贴板ToolStripMenuItem.Click += 识别剪贴板ToolStripMenuItem_Click;
+            // 
+            // 专注模式ToolStripMenuItem
+            // 
+            专注模式ToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { 开启ToolStripMenuItem, 关闭ToolStripMenuItem });
+            专注模式ToolStripMenuItem.Name = "专注模式ToolStripMenuItem";
+            专注模式ToolStripMenuItem.Size = new Size(196, 22);
+            专注模式ToolStripMenuItem.Text = Resources.FocusMode;
+            // 
+            // 开启ToolStripMenuItem
+            // 
+            开启ToolStripMenuItem.Name = "开启ToolStripMenuItem";
+            开启ToolStripMenuItem.Size = new Size(124, 22);
+            开启ToolStripMenuItem.Text = Resources.TO;
+            开启ToolStripMenuItem.Click += 专注开启ToolStripMenuItem_Click;
+            // 
+            // 关闭ToolStripMenuItem
+            // 
+            关闭ToolStripMenuItem.Checked = true;
+            关闭ToolStripMenuItem.CheckState = CheckState.Checked;
+            关闭ToolStripMenuItem.Name = "关闭ToolStripMenuItem";
+            关闭ToolStripMenuItem.Size = new Size(124, 22);
+            关闭ToolStripMenuItem.Text = Resources.TF;
+            关闭ToolStripMenuItem.Click += 专注关闭ToolStripMenuItem_Click;
+            // 
+            // 退出软件ToolStripMenuItem
+            // 
+            退出软件ToolStripMenuItem.Name = "退出软件ToolStripMenuItem";
+            退出软件ToolStripMenuItem.Size = new Size(196, 22);
+            退出软件ToolStripMenuItem.Text = Resources.ExitSoftware;
+            退出软件ToolStripMenuItem.Click += 退出软件ToolStripMenuItem_Click;
             // 
             // textOCR
             // 
@@ -104,67 +162,10 @@
             // notifyIcon
             // 
             notifyIcon.ContextMenuStrip = iconMenu;
-            notifyIcon.Icon = (Icon)resources.GetObject("$this.Icon");
+            notifyIcon.Icon = (Icon)resources.GetObject("notifyIcon.Icon");
             notifyIcon.Text = Resources.ScreenOCR;
             notifyIcon.Visible = true;
             notifyIcon.DoubleClick += notifyIcon_DoubleClick;
-            // 
-            // iconMenu
-            // 
-            iconMenu.Items.AddRange(new ToolStripItem[] { 显示ToolStripMenuItem, 开始截图ToolStripMenuItem, 识别剪贴板ToolStripMenuItem, 专注模式ToolStripMenuItem, 退出软件ToolStripMenuItem });
-            iconMenu.Name = "iconMenu";
-            iconMenu.Size = new Size(137, 114);
-            // 
-            // 显示ToolStripMenuItem
-            // 
-            显示ToolStripMenuItem.Name = "显示ToolStripMenuItem";
-            显示ToolStripMenuItem.Size = new Size(136, 22);
-            显示ToolStripMenuItem.Text = Resources.ShowInterface;
-            显示ToolStripMenuItem.Click += 显示ToolStripMenuItem_Click;
-            // 
-            // 开始截图ToolStripMenuItem
-            // 
-            开始截图ToolStripMenuItem.Name = "开始截图ToolStripMenuItem";
-            开始截图ToolStripMenuItem.Size = new Size(136, 22);
-            开始截图ToolStripMenuItem.Text = Resources.StartScreenshot;
-            开始截图ToolStripMenuItem.Click += 开始截图ToolStripMenuItem_Click;
-            // 
-            // 识别剪贴板ToolStripMenuItem
-            // 
-            识别剪贴板ToolStripMenuItem.Name = "识别剪贴板ToolStripMenuItem";
-            识别剪贴板ToolStripMenuItem.Size = new Size(136, 22);
-            识别剪贴板ToolStripMenuItem.Text = Resources.RecognizeClipboard;
-            识别剪贴板ToolStripMenuItem.Click += 识别剪贴板ToolStripMenuItem_Click;
-            // 
-            // 专注模式ToolStripMenuItem
-            // 
-            专注模式ToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { 开启ToolStripMenuItem, 关闭ToolStripMenuItem });
-            专注模式ToolStripMenuItem.Name = "专注模式ToolStripMenuItem";
-            专注模式ToolStripMenuItem.Size = new Size(136, 22);
-            专注模式ToolStripMenuItem.Text = Resources.FocusMode;
-            // 
-            // 开启ToolStripMenuItem
-            // 
-            开启ToolStripMenuItem.Name = "开启ToolStripMenuItem";
-            开启ToolStripMenuItem.Size = new Size(100, 22);
-            开启ToolStripMenuItem.Text = Resources.TO;
-            开启ToolStripMenuItem.Click += 专注开启ToolStripMenuItem_Click;
-            // 
-            // 关闭ToolStripMenuItem
-            // 
-            关闭ToolStripMenuItem.Checked = true;
-            关闭ToolStripMenuItem.CheckState = CheckState.Checked;
-            关闭ToolStripMenuItem.Name = "关闭ToolStripMenuItem";
-            关闭ToolStripMenuItem.Size = new Size(100, 22);
-            关闭ToolStripMenuItem.Text = Resources.TF;
-            关闭ToolStripMenuItem.Click += 专注关闭ToolStripMenuItem_Click;
-            // 
-            // 退出软件ToolStripMenuItem
-            // 
-            退出软件ToolStripMenuItem.Name = "退出软件ToolStripMenuItem";
-            退出软件ToolStripMenuItem.Size = new Size(136, 22);
-            退出软件ToolStripMenuItem.Text = Resources.ExitSoftware;
-            退出软件ToolStripMenuItem.Click += 退出软件ToolStripMenuItem_Click;
             // 
             // Main
             // 
@@ -172,7 +173,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(784, 461);
             Controls.Add(splitContainer);
-            Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(800, 500);
             Name = "Main";
             ShowInTaskbar = false;
