@@ -1,6 +1,7 @@
 ﻿using PaddleOCRSharp;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.Globalization;
 
 namespace Snipping_OCR
 {
@@ -12,7 +13,15 @@ namespace Snipping_OCR
             InitializeComponent();
         }
 
+        /// <summary>
+        /// OCR 引擎
+        /// </summary>
         private PaddleOCREngine engine;
+
+        /// <summary>
+        /// 专注模式
+        /// </summary>
+        private bool isFocus = false;
 
 
         /// <summary>
@@ -32,6 +41,17 @@ namespace Snipping_OCR
         /// <param name="e"></param>
         private void Main_Load(object sender, EventArgs e)
         {
+            CultureInfo currentCulture = CultureInfo.CurrentCulture;
+            if (currentCulture.TwoLetterISOLanguageName == "zh")
+            {
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo("zh-CN");
+            }
+            else
+            {
+                Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+            }
+
+
             //注册热键 Ctrl+TAB 截图
             try
             {
@@ -39,7 +59,7 @@ namespace Snipping_OCR
             }
             catch
             {
-                notifyIcon.ShowBalloonTip(2, "屏幕 OCR", "热键注册失败，您仍可以使用其他方式执行 OCR。",ToolTipIcon.Info);
+                notifyIcon.ShowBalloonTip(2, "ocr", "热键注册失败，您仍可以使用其他方式执行 OCR。", ToolTipIcon.Info);
             }
 
             OCRParameter oCRParameter = new()
@@ -74,8 +94,11 @@ namespace Snipping_OCR
         private async void StartCapture()
         {
             // 隐藏
-            this.WindowState = FormWindowState.Minimized;
-            this.Hide();
+            if (!isFocus)
+            {
+                this.WindowState = FormWindowState.Minimized;
+                this.Hide();
+            }
 
             var psi = new ProcessStartInfo()
             {
@@ -230,6 +253,35 @@ namespace Snipping_OCR
         private void 开始截图ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             StartCapture();
+        }
+
+        private void 专注开启ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetFocusMode(true);
+        }
+
+        private void 专注关闭ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetFocusMode(false);
+        }
+
+        /// <summary>
+        /// 专注模式切换
+        /// </summary>
+        /// <param name="isFocus">是否启用</param>
+        private void SetFocusMode(bool isFocus)
+        {
+            this.isFocus = isFocus;
+            this.TopMost = isFocus;
+            this.FormBorderStyle = isFocus ? FormBorderStyle.FixedToolWindow : FormBorderStyle.Sizable;
+            this.MinimumSize = isFocus ? this.textOCR.Size : new Size(800, 500);
+            this.Size = isFocus ? this.textOCR.Size : new Size(800, 500);
+            this.splitContainer.Panel1Collapsed = isFocus;
+            this.Opacity = isFocus ? 0.9 : 1;
+            this.textOCR.BackColor = isFocus ? Color.FromArgb(227, 237, 205) : Color.White;
+            this.Text = isFocus ? "Snipping OCR - 专注模式" : "Snipping OCR";
+            this.开启ToolStripMenuItem.Checked = isFocus;
+            this.关闭ToolStripMenuItem.Checked = !isFocus;
         }
     }
 }
