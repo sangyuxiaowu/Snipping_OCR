@@ -16,10 +16,11 @@ The tool has been tested on Windows 10 and Windows 11. Please note that it does 
 - Recognizes Chinese and English characters
 - Recognizes clipboard images
 - Allows drag and drop
+- Focus Mode
 
 ## Installation
 
-You can download and unzip the software from the repository's Releases. No installation is required. We provide standalone versions for windows and versions dependent on the .NET6 framework. For the framework-dependent version, you need to install the [.NET8 runtime](https://dotnet.microsoft.com/zh-cn/download/dotnet/8.0).
+You can download and unzip the software from the repository's Releases. No installation is required.
 
 ## Usage
 

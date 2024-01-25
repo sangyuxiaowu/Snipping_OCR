@@ -16,10 +16,11 @@ Snipping_OCR 是一个简单的桌面截图 OCR 工具，专为 Windows 平台�
 - 中英文字符识别
 - 剪切板图片识别
 - 支持拖拽
+- 专注模式
 
 ## 安装
 
-你可以在仓库的 Releases 下载并解压软件，无需安装。我们提供了 Windows 的独立版本和依赖 .NET8 框架的版本。对于依赖框架的版本，你需要安装 [.NET8 运行时](https://dotnet.microsoft.com/zh-cn/download/dotnet/8.0)。
+你可以在仓库的 Releases 下载并解压软件，无需安装。
 
 ## 使用
 
