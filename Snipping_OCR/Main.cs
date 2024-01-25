@@ -46,10 +46,12 @@ namespace Snipping_OCR
             if (currentCulture.TwoLetterISOLanguageName == "zh")
             {
                 Thread.CurrentThread.CurrentUICulture = new CultureInfo("zh-CN");
+                Thread.CurrentThread.CurrentCulture = new CultureInfo("zh-CN");
             }
             else
             {
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             }
 
             this.Icon = notifyIcon.Icon;
