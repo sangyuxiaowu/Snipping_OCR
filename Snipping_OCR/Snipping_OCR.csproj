@@ -8,7 +8,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
-    <Version>1.1.2</Version>
+    <Version>1.2.2</Version>
 	<Authors>SangSQ(桑世强)</Authors>
   </PropertyGroup>
 
