@@ -79,11 +79,38 @@ namespace Snipping_OCR {
         }
         
         /// <summary>
+        ///   查找类似 Help 的本地化字符串。
+        /// </summary>
+        internal static string Help {
+            get {
+                return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Hotkey registration failed, you can still use other methods to Hotkey registration failed, you can still use other methods to perform OCR. 的本地化字符串。
         /// </summary>
         internal static string HotkeyRegistrationFailed {
             get {
                 return ResourceManager.GetString("HotkeyRegistrationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 APP ID 的本地化字符串。
+        /// </summary>
+        internal static string labAPPID {
+            get {
+                return ResourceManager.GetString("labAPPID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Secret 的本地化字符串。
+        /// </summary>
+        internal static string labSecret {
+            get {
+                return ResourceManager.GetString("labSecret", resourceCulture);
             }
         }
         
@@ -97,11 +124,29 @@ namespace Snipping_OCR {
         }
         
         /// <summary>
+        ///   查找类似 Save Settings 的本地化字符串。
+        /// </summary>
+        internal static string SaveSettings {
+            get {
+                return ResourceManager.GetString("SaveSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Snipping OCR 的本地化字符串。
         /// </summary>
         internal static string ScreenOCR {
             get {
                 return ResourceManager.GetString("ScreenOCR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Please enter the APPID and Secret. 的本地化字符串。
+        /// </summary>
+        internal static string SettingsTips {
+            get {
+                return ResourceManager.GetString("SettingsTips", resourceCulture);
             }
         }
         
@@ -138,6 +183,24 @@ namespace Snipping_OCR {
         internal static string TO {
             get {
                 return ResourceManager.GetString("TO", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Translate selected 的本地化字符串。
+        /// </summary>
+        internal static string TranslateSelected {
+            get {
+                return ResourceManager.GetString("TranslateSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Translate Settings 的本地化字符串。
+        /// </summary>
+        internal static string TranslateSettings {
+            get {
+                return ResourceManager.GetString("TranslateSettings", resourceCulture);
             }
         }
     }

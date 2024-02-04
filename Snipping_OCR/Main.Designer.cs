@@ -37,9 +37,11 @@
             开始截图ToolStripMenuItem = new ToolStripMenuItem();
             识别剪贴板ToolStripMenuItem = new ToolStripMenuItem();
             专注模式ToolStripMenuItem = new ToolStripMenuItem();
-            开启ToolStripMenuItem = new ToolStripMenuItem();
-            关闭ToolStripMenuItem = new ToolStripMenuItem();
+            划词翻译ToolStripMenuItem = new ToolStripMenuItem();
+            翻译设置ToolStripMenuItem = new ToolStripMenuItem();
             退出软件ToolStripMenuItem = new ToolStripMenuItem();
+            splitContainerText = new SplitContainer();
+            textTR = new TextBox();
             textOCR = new TextBox();
             notifyIcon = new NotifyIcon(components);
             ((System.ComponentModel.ISupportInitialize)splitContainer).BeginInit();
@@ -47,6 +49,10 @@
             splitContainer.Panel2.SuspendLayout();
             splitContainer.SuspendLayout();
             iconMenu.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainerText).BeginInit();
+            splitContainerText.Panel1.SuspendLayout();
+            splitContainerText.Panel2.SuspendLayout();
+            splitContainerText.SuspendLayout();
             SuspendLayout();
             // 
             // splitContainer
@@ -63,7 +69,7 @@
             // 
             // splitContainer.Panel2
             // 
-            splitContainer.Panel2.Controls.Add(textOCR);
+            splitContainer.Panel2.Controls.Add(splitContainerText);
             splitContainer.Panel2MinSize = 200;
             splitContainer.Size = new Size(784, 461);
             splitContainer.SplitterDistance = 500;
@@ -92,9 +98,9 @@
             // 
             // iconMenu
             // 
-            iconMenu.Items.AddRange(new ToolStripItem[] { 显示ToolStripMenuItem, 开始截图ToolStripMenuItem, 识别剪贴板ToolStripMenuItem, 专注模式ToolStripMenuItem, 退出软件ToolStripMenuItem });
+            iconMenu.Items.AddRange(new ToolStripItem[] { 显示ToolStripMenuItem, 开始截图ToolStripMenuItem, 识别剪贴板ToolStripMenuItem, 专注模式ToolStripMenuItem, 划词翻译ToolStripMenuItem, 退出软件ToolStripMenuItem });
             iconMenu.Name = "iconMenu";
-            iconMenu.Size = new Size(197, 114);
+            iconMenu.Size = new Size(197, 136);
             // 
             // 显示ToolStripMenuItem
             // 
@@ -119,26 +125,25 @@
             // 
             // 专注模式ToolStripMenuItem
             // 
-            专注模式ToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { 开启ToolStripMenuItem, 关闭ToolStripMenuItem });
             专注模式ToolStripMenuItem.Name = "专注模式ToolStripMenuItem";
             专注模式ToolStripMenuItem.Size = new Size(196, 22);
             专注模式ToolStripMenuItem.Text = Resources.FocusMode;
+            专注模式ToolStripMenuItem.Click += 专注模式ToolStripMenuItem_Click;
             // 
-            // 开启ToolStripMenuItem
+            // 划词翻译ToolStripMenuItem
             // 
-            开启ToolStripMenuItem.Name = "开启ToolStripMenuItem";
-            开启ToolStripMenuItem.Size = new Size(124, 22);
-            开启ToolStripMenuItem.Text = Resources.TO;
-            开启ToolStripMenuItem.Click += 专注开启ToolStripMenuItem_Click;
+            划词翻译ToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { 翻译设置ToolStripMenuItem });
+            划词翻译ToolStripMenuItem.Name = "划词翻译ToolStripMenuItem";
+            划词翻译ToolStripMenuItem.Size = new Size(196, 22);
+            划词翻译ToolStripMenuItem.Text = Resources.TranslateSelected;
+            划词翻译ToolStripMenuItem.Click += 划词翻译ToolStripMenuItem_Click;
             // 
-            // 关闭ToolStripMenuItem
+            // 翻译设置ToolStripMenuItem
             // 
-            关闭ToolStripMenuItem.Checked = true;
-            关闭ToolStripMenuItem.CheckState = CheckState.Checked;
-            关闭ToolStripMenuItem.Name = "关闭ToolStripMenuItem";
-            关闭ToolStripMenuItem.Size = new Size(124, 22);
-            关闭ToolStripMenuItem.Text = Resources.TF;
-            关闭ToolStripMenuItem.Click += 专注关闭ToolStripMenuItem_Click;
+            翻译设置ToolStripMenuItem.Name = "翻译设置ToolStripMenuItem";
+            翻译设置ToolStripMenuItem.Size = new Size(179, 22);
+            翻译设置ToolStripMenuItem.Text = Resources.TranslateSettings;
+            翻译设置ToolStripMenuItem.Click += 翻译设置ToolStripMenuItem_Click;
             // 
             // 退出软件ToolStripMenuItem
             // 
@@ -146,6 +151,37 @@
             退出软件ToolStripMenuItem.Size = new Size(196, 22);
             退出软件ToolStripMenuItem.Text = Resources.ExitSoftware;
             退出软件ToolStripMenuItem.Click += 退出软件ToolStripMenuItem_Click;
+            // 
+            // splitContainerText
+            // 
+            splitContainerText.Dock = DockStyle.Fill;
+            splitContainerText.Location = new Point(0, 0);
+            splitContainerText.Name = "splitContainerText";
+            splitContainerText.Orientation = Orientation.Horizontal;
+            // 
+            // splitContainerText.Panel1
+            // 
+            splitContainerText.Panel1.Controls.Add(textTR);
+            splitContainerText.Panel1Collapsed = true;
+            // 
+            // splitContainerText.Panel2
+            // 
+            splitContainerText.Panel2.Controls.Add(textOCR);
+            splitContainerText.Panel2MinSize = 300;
+            splitContainerText.Size = new Size(280, 461);
+            splitContainerText.SplitterDistance = 161;
+            splitContainerText.TabIndex = 1;
+            // 
+            // textTR
+            // 
+            textTR.BorderStyle = BorderStyle.None;
+            textTR.Dock = DockStyle.Fill;
+            textTR.Location = new Point(0, 0);
+            textTR.Multiline = true;
+            textTR.Name = "textTR";
+            textTR.ScrollBars = ScrollBars.Vertical;
+            textTR.Size = new Size(150, 161);
+            textTR.TabIndex = 0;
             // 
             // textOCR
             // 
@@ -158,6 +194,8 @@
             textOCR.ScrollBars = ScrollBars.Vertical;
             textOCR.Size = new Size(280, 461);
             textOCR.TabIndex = 0;
+            textOCR.KeyUp += textOCR_KeyUp;
+            textOCR.MouseUp += textOCR_MouseUp;
             // 
             // notifyIcon
             // 
@@ -183,10 +221,15 @@
             SizeChanged += Main_SizeChanged;
             splitContainer.Panel1.ResumeLayout(false);
             splitContainer.Panel2.ResumeLayout(false);
-            splitContainer.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer).EndInit();
             splitContainer.ResumeLayout(false);
             iconMenu.ResumeLayout(false);
+            splitContainerText.Panel1.ResumeLayout(false);
+            splitContainerText.Panel1.PerformLayout();
+            splitContainerText.Panel2.ResumeLayout(false);
+            splitContainerText.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainerText).EndInit();
+            splitContainerText.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -202,7 +245,9 @@
         private ToolStripMenuItem 退出软件ToolStripMenuItem;
         private ToolStripMenuItem 开始截图ToolStripMenuItem;
         private ToolStripMenuItem 专注模式ToolStripMenuItem;
-        private ToolStripMenuItem 开启ToolStripMenuItem;
-        private ToolStripMenuItem 关闭ToolStripMenuItem;
+        private SplitContainer splitContainerText;
+        private TextBox textTR;
+        private ToolStripMenuItem 划词翻译ToolStripMenuItem;
+        private ToolStripMenuItem 翻译设置ToolStripMenuItem;
     }
 }

@@ -144,4 +144,25 @@
   <data name="TO" xml:space="preserve">
     <value>Turn On</value>
   </data>
+  <data name="TranslateSelected" xml:space="preserve">
+    <value>Translate selected</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="labAPPID" xml:space="preserve">
+    <value>APP ID</value>
+  </data>
+  <data name="labSecret" xml:space="preserve">
+    <value>Secret</value>
+  </data>
+  <data name="SaveSettings" xml:space="preserve">
+    <value>Save Settings</value>
+  </data>
+  <data name="SettingsTips" xml:space="preserve">
+    <value>Please enter the APPID and Secret.</value>
+  </data>
+  <data name="TranslateSettings" xml:space="preserve">
+    <value>Translate Settings</value>
+  </data>
 </root>

@@ -1,7 +1,9 @@
 ﻿using PaddleOCRSharp;
+using Sang.Baidu.TranslateAPI;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Globalization;
+using Windows.Security.Credentials;
 
 namespace Snipping_OCR
 {
@@ -23,6 +25,39 @@ namespace Snipping_OCR
         /// </summary>
         private bool isFocus = false;
 
+        /// <summary>
+        /// 划词翻译
+        /// </summary>
+        private bool isTranslate = false;
+
+        /// <summary>
+        /// 翻译 SDK
+        /// </summary>
+        private BaiduTranslator baiduTranslator;
+
+        /// <summary>
+        /// 翻译配置 AppId
+        /// </summary>
+        private string baiduAppId = "";
+
+        /// <summary>
+        /// 翻译配置 密钥
+        /// </summary>
+        private string baiduSecretKey = "";
+
+        /// <summary>
+        /// 翻译目标语言
+        /// </summary>
+        private string targetLanguage = "";
+
+        // 上次翻译内容
+        private string lastTranslateText = "";
+
+        /// <summary>
+        /// 配置信息 Resource
+        /// </summary>
+        private readonly string configResource = "Snipping_OCR_BaiduTranslator";
+
 
         /// <summary>
         /// 覆写窗体消息
@@ -43,7 +78,8 @@ namespace Snipping_OCR
         {
             // 根据操作系统自动设置语言
             CultureInfo currentCulture = CultureInfo.CurrentCulture;
-            if (currentCulture.TwoLetterISOLanguageName == "zh")
+            targetLanguage = currentCulture.TwoLetterISOLanguageName;
+            if (targetLanguage == "zh")
             {
                 Thread.CurrentThread.CurrentUICulture = new CultureInfo("zh-CN");
                 Thread.CurrentThread.CurrentCulture = new CultureInfo("zh-CN");
@@ -72,6 +108,16 @@ namespace Snipping_OCR
                 use_gpu = true,
             };
             engine = new(null, oCRParameter);
+
+            // 获取翻译配置
+            GetTranslateConfig();
+
+            // 如果已经配置翻译，则启用划词翻译
+            if (!string.IsNullOrEmpty(baiduAppId))
+            {
+                TranslateSwitch();
+                TranslateCheck();
+            }
         }
 
         /// <summary>
@@ -260,14 +306,9 @@ namespace Snipping_OCR
             StartCapture();
         }
 
-        private void 专注开启ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void 专注模式ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetFocusMode(true);
-        }
-
-        private void 专注关闭ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SetFocusMode(false);
+            SetFocusMode(!isFocus);
         }
 
         /// <summary>
@@ -284,9 +325,189 @@ namespace Snipping_OCR
             this.splitContainer.Panel1Collapsed = isFocus;
             this.Opacity = isFocus ? 0.9 : 1;
             this.textOCR.BackColor = isFocus ? Color.FromArgb(227, 237, 205) : Color.White;
+            this.textTR.BackColor = this.textOCR.BackColor;
             this.Text = isFocus ? $"Snipping OCR - {Resources.FocusMode}" : "Snipping OCR";
-            this.开启ToolStripMenuItem.Checked = isFocus;
-            this.关闭ToolStripMenuItem.Checked = !isFocus;
+            this.专注模式ToolStripMenuItem.Checked = isFocus;
         }
+
+        /// <summary>
+        /// 划词翻译切换
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void 划词翻译ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TranslateSwitch();
+            TranslateCheck();
+        }
+
+        /// <summary>
+        /// 划词翻译切换
+        /// </summary>
+        private void TranslateSwitch()
+        {
+            this.isTranslate = !isTranslate;
+            this.划词翻译ToolStripMenuItem.Checked = isTranslate;
+            if (!isTranslate)
+            {
+                splitContainerText.Panel1Collapsed = true;
+            }
+        }
+
+        /// <summary>
+        /// 翻译配置和初始化检查
+        /// </summary>
+        private void TranslateCheck()
+        {
+            if (isTranslate)
+            {
+                // 检查配置
+                if (string.IsNullOrEmpty(baiduAppId))
+                {
+                    SetTranslateConfig();
+                    // 再次检查配置
+                    if (string.IsNullOrEmpty(baiduAppId))
+                    {
+                        // 未配置翻译，关闭划词翻译
+                        TranslateSwitch();
+                        return;
+                    }
+                }
+                if (baiduTranslator == null)
+                {
+                    baiduTranslator = new(baiduAppId, baiduSecretKey);
+                }
+                else
+                {
+                    baiduTranslator.SetAppIdAndSecretKey(baiduAppId, baiduSecretKey);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Ctrl + A 全选时触发翻译
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void textOCR_KeyUp(object sender, KeyEventArgs e)
+        {
+            textOCR_MouseUp(null, null);
+        }
+
+        /// <summary>
+        /// 选择文本时触发翻译
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void textOCR_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (!isTranslate) return;
+            if (textOCR.SelectedText.Length > 0)
+            {
+                // 选中文本时，显示翻译框
+                var text = textOCR.SelectedText.Replace("\r\n", " ");
+
+                // 如果选中文本和上次一样，则不再翻译
+                if (text == lastTranslateText)
+                {
+                    splitContainerText.Panel1Collapsed = false;
+                    splitContainerText.SplitterDistance = 100;
+                    return;
+                }
+
+                var result = await baiduTranslator.Translate(text, targetLanguage);
+                this.Invoke(() =>
+                {
+                    if (result is null || !result.Success)
+                    {
+                        textTR.Text = result?.Error_Msg;
+                    }
+                    else
+                    {
+                        textTR.Text = result.Trans_Result[0].Dst;
+                        lastTranslateText = text;
+                    }
+                    splitContainerText.Panel1Collapsed = false;
+                    splitContainerText.SplitterDistance = 100;
+                });
+            }
+            else
+            {
+                // 未选中文本时，并且没有复制翻译内容的意图时，隐藏翻译框
+                if (!textTR.Focused)
+                {
+                    splitContainerText.Panel1Collapsed = true;
+                }
+            }
+        }
+
+        private void 翻译设置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetTranslateConfig();
+        }
+
+        /// <summary>
+        /// 设置翻译配置
+        /// </summary>
+        private void SetTranslateConfig()
+        {
+            InputDialog inputDialog = new(baiduAppId, baiduSecretKey);
+            if (inputDialog.ShowDialog() == DialogResult.OK)
+            {
+                baiduAppId = inputDialog.AppId;
+                baiduSecretKey = inputDialog.Secret;
+                SaveConfig();
+            }
+        }
+
+        /// <summary>
+        /// 获取翻译配置
+        /// </summary>
+        private void GetTranslateConfig()
+        {
+            var vault = new PasswordVault();
+            try
+            {
+                var credential = vault.FindAllByResource(configResource).FirstOrDefault();
+                if (credential != null)
+                {
+                    credential.RetrievePassword();
+                    baiduAppId = credential.UserName;
+                    baiduSecretKey = credential.Password;
+                }
+            }
+            catch
+            {
+                baiduAppId = "";
+                baiduSecretKey = "";
+            }
+        }
+
+        /// <summary>
+        /// 保存配置
+        /// </summary>
+        private void SaveConfig()
+        {
+            var vault = new PasswordVault();
+            try
+            {
+                var credential = new PasswordCredential(configResource, baiduAppId, baiduSecretKey);
+                vault.Add(credential);
+            }
+            catch
+            {
+                // ignored
+            }
+            finally
+            {
+                // 更新翻译配置
+                if (baiduTranslator != null)
+                {
+                    baiduTranslator.SetAppIdAndSecretKey(baiduAppId, baiduSecretKey);
+                }
+            }
+        }
+
+        
     }
 }
