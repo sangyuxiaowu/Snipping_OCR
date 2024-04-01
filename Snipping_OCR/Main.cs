@@ -118,6 +118,37 @@ namespace Snipping_OCR
                 TranslateSwitch();
                 TranslateCheck();
             }
+
+            // 命令行启动OCR
+            var CmdArgs = Environment.GetCommandLineArgs();
+            if (CmdArgs.Length > 1)
+            {
+                // 如果存在第二个参数，并且第一个参数是 capture，则第二个参数是文件路径
+                if (CmdArgs.Length > 2 && CmdArgs[1]== "capture")
+                {
+                    CmdArgs[1] = CmdArgs[2];
+                }
+
+                // 可以通过命令行调用所以需要判断文件是否存在
+                string file = CmdArgs[1];
+                if (File.Exists(file))
+                {
+                    string ext = file.ToLower().Substring(file.Length - 3);
+                    if (ImgAllow.Contains(ext))
+                    {
+                        sqPhoto.Image = Image.FromFile(file);
+                        timeOCR_Start();
+                    }
+                }
+                else
+                {
+                    // 快捷命令
+                    if (CmdArgs[1] == "capture")
+                    {
+                        StartCapture(); 
+                    }
+                }
+            }
         }
 
         /// <summary>
