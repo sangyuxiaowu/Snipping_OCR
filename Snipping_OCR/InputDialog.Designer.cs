@@ -1,4 +1,11 @@
-﻿namespace Snipping_OCR
+﻿#if NET481_OR_GREATER
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+
+#endif
+
+namespace Snipping_OCR
 {
     partial class InputDialog
     {

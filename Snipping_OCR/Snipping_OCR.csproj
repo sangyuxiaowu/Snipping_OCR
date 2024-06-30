@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net8.0-windows10.0.17763.0</TargetFrameworks>
-    <Nullable>enable</Nullable>
-    <UseWindowsForms>true</UseWindowsForms>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Platforms>AnyCPU;x64</Platforms>
+    <TargetFrameworks>net8.0-windows10.0.17763.0;net481</TargetFrameworks>
+    <Nullable Condition="'$(TargetFramework)' == 'net8.0-windows10.0.17763.0'">enable</Nullable>
+    <ImplicitUsings Condition="'$(TargetFramework)' == 'net8.0-windows10.0.17763.0'">enable</ImplicitUsings>
+	<UseWindowsForms>true</UseWindowsForms>
+    <Platforms>x64</Platforms>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
-    <Version>1.3.5</Version>
+    <Version>1.3.6</Version>
 	<Authors>SangSQ(桑世强)</Authors>
   </PropertyGroup>
 
@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PaddleOCRSharp" Version="4.1.0" />
-    <PackageReference Include="Sang.Baidu.TranslateAPI" Version="1.0.2" />
+    <PackageReference Include="PaddleOCRSharp" Version="4.3.0" />
+    <PackageReference Include="Sang.Baidu.TranslateAPI" Version="1.0.5" />
     <PackageReference Include="SQPhoto" Version="1.0.3" />
   </ItemGroup>
 

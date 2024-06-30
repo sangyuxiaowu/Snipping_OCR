@@ -1,4 +1,8 @@
 ﻿using System.Runtime.InteropServices;
+#if NET481_OR_GREATER
+using System;
+using System.Windows.Forms;
+#endif
 
 namespace Snipping_OCR
 {

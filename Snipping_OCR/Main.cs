@@ -3,7 +3,18 @@ using Sang.Baidu.TranslateAPI;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Globalization;
+
+#if NET481_OR_GREATER
+using System;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Threading;
+#else
 using Windows.Security.Credentials;
+#endif
+
 
 namespace Snipping_OCR
 {
@@ -58,6 +69,13 @@ namespace Snipping_OCR
         /// </summary>
         private readonly string configResource = "Snipping_OCR_BaiduTranslator";
 
+#if NET481_OR_GREATER
+        /// <summary>
+        /// 程序配置文件目录
+        /// </summary>
+        string configFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"conf.dat");
+#endif
+
 
         /// <summary>
         /// 覆写窗体消息
@@ -103,11 +121,11 @@ namespace Snipping_OCR
                 notifyIcon.ShowBalloonTip(2, Resources.ScreenOCR, Resources.HotkeyRegistrationFailed, ToolTipIcon.Info);
             }
 
-            OCRParameter oCRParameter = new()
+            OCRParameter oCRParameter = new OCRParameter()
             {
                 use_gpu = true,
             };
-            engine = new(null, oCRParameter);
+            engine = new PaddleOCREngine(null, oCRParameter);
 
             // 获取翻译配置
             GetTranslateConfig();
@@ -195,7 +213,11 @@ namespace Snipping_OCR
             var sinpping = postLaunchProcesses3.FirstOrDefault();
             if (sinpping != null)
             {
+# if NET481_OR_GREATER
+                sinpping.WaitForExit();
+#else
                 await sinpping.WaitForExitAsync();
+#endif
                 ClipboardOCR();
             }
         }
@@ -238,7 +260,7 @@ namespace Snipping_OCR
         /// <param name="e"></param>
         private void sqPhoto_DragDrop(object sender, DragEventArgs e)
         {
-            string file = ((System.Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString()!;
+            string file = ((System.Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString();
             string ext = file.ToLower().Substring(file.Length - 3);
             if (ImgAllow.Contains(ext))
             {
@@ -406,7 +428,7 @@ namespace Snipping_OCR
                 }
                 if (baiduTranslator == null)
                 {
-                    baiduTranslator = new(baiduAppId, baiduSecretKey);
+                    baiduTranslator = new BaiduTranslator(baiduAppId, baiduSecretKey);
                 }
                 else
                 {
@@ -442,12 +464,16 @@ namespace Snipping_OCR
                 if (text == lastTranslateText)
                 {
                     splitContainerText.Panel1Collapsed = false;
-                    splitContainerText.SplitterDistance = 100;
                     return;
                 }
 
                 var result = await baiduTranslator.Translate(text, targetLanguage);
+#if NET481_OR_GREATER
+                this.Invoke((MethodInvoker)delegate
+#else
                 this.Invoke(() =>
+#endif
+
                 {
                     if (result is null || !result.Success)
                     {
@@ -459,7 +485,6 @@ namespace Snipping_OCR
                         lastTranslateText = text;
                     }
                     splitContainerText.Panel1Collapsed = false;
-                    splitContainerText.SplitterDistance = 100;
                 });
             }
             else
@@ -482,7 +507,7 @@ namespace Snipping_OCR
         /// </summary>
         private void SetTranslateConfig()
         {
-            InputDialog inputDialog = new(baiduAppId, baiduSecretKey);
+            InputDialog inputDialog = new InputDialog(baiduAppId, baiduSecretKey);
             if (inputDialog.ShowDialog() == DialogResult.OK)
             {
                 baiduAppId = inputDialog.AppId;
@@ -496,9 +521,20 @@ namespace Snipping_OCR
         /// </summary>
         private void GetTranslateConfig()
         {
-            var vault = new PasswordVault();
             try
             {
+                #if NET481_OR_GREATER
+                if (File.Exists(configFile))
+                {
+                    var lines = File.ReadAllLines(configFile);
+                    if (lines.Length == 2)
+                    {
+                        baiduAppId = lines[0].Trim();
+                        baiduSecretKey = lines[1].Trim();
+                    }
+                }
+                #else
+                var vault = new PasswordVault();
                 var credential = vault.FindAllByResource(configResource).FirstOrDefault();
                 if (credential != null)
                 {
@@ -506,6 +542,7 @@ namespace Snipping_OCR
                     baiduAppId = credential.UserName;
                     baiduSecretKey = credential.Password;
                 }
+                #endif
             }
             catch
             {
@@ -519,11 +556,15 @@ namespace Snipping_OCR
         /// </summary>
         private void SaveConfig()
         {
-            var vault = new PasswordVault();
             try
             {
+                #if NET481_OR_GREATER
+                File.WriteAllText(configFile, $"{baiduAppId}\r\n{baiduSecretKey}");
+                #else
+                var vault = new PasswordVault();
                 var credential = new PasswordCredential(configResource, baiduAppId, baiduSecretKey);
                 vault.Add(credential);
+                #endif
             }
             catch
             {
