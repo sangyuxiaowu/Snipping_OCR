@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PaddleOCRSharp" Version="4.4.0.2" />
+    <PackageReference Include="PaddleOCRSharp" Version="4.5.0.1" />
     <PackageReference Include="Sang.Baidu.TranslateAPI" Version="1.0.5" />
     <PackageReference Include="SQPhoto" Version="1.0.3" />
   </ItemGroup>
