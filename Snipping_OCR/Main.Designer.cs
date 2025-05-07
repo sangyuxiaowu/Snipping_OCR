@@ -47,7 +47,7 @@ namespace Snipping_OCR
             退出软件ToolStripMenuItem = new ToolStripMenuItem();
             splitContainerText = new SplitContainer();
             textTR = new TextBox();
-            textOCR = new TextBox();
+            textOCR = new RichTextBox();
             notifyIcon = new NotifyIcon(components);
             ((System.ComponentModel.ISupportInitialize)splitContainer).BeginInit();
             splitContainer.Panel1.SuspendLayout();
@@ -194,9 +194,8 @@ namespace Snipping_OCR
             textOCR.Dock = DockStyle.Fill;
             textOCR.Font = new Font("Microsoft YaHei UI", 10.5F);
             textOCR.Location = new Point(0, 0);
-            textOCR.Multiline = true;
             textOCR.Name = "textOCR";
-            textOCR.ScrollBars = ScrollBars.Vertical;
+            textOCR.ScrollBars = RichTextBoxScrollBars.Vertical;
             textOCR.Size = new Size(280, 461);
             textOCR.TabIndex = 0;
             textOCR.KeyUp += textOCR_KeyUp;
@@ -242,7 +241,7 @@ namespace Snipping_OCR
 
         private SplitContainer splitContainer;
         private SQPhoto.SQPhoto sqPhoto;
-        private TextBox textOCR;
+        private RichTextBox textOCR;
         private NotifyIcon notifyIcon;
         private ContextMenuStrip iconMenu;
         private ToolStripMenuItem 显示ToolStripMenuItem;
