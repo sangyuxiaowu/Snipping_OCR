@@ -507,11 +507,11 @@ namespace Snipping_OCR
         /// </summary>
         private void SetTranslateConfig()
         {
-            InputDialog inputDialog = new InputDialog(baiduAppId, baiduSecretKey);
+            InputDialog inputDialog = new InputDialog(Resources.TranslateSettings ,"APP ID", "Secret", baiduAppId, baiduSecretKey, "https://fanyi-api.baidu.com/doc/13", Resources.SaveSettings);
             if (inputDialog.ShowDialog() == DialogResult.OK)
             {
-                baiduAppId = inputDialog.AppId;
-                baiduSecretKey = inputDialog.Secret;
+                baiduAppId = inputDialog.Value1;
+                baiduSecretKey = inputDialog.Value2;
                 SaveConfig();
             }
         }
