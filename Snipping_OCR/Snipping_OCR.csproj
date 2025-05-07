@@ -10,6 +10,7 @@
     <ApplicationIcon>favicon.ico</ApplicationIcon>
     <Version>1.3.7</Version>
 	<Authors>SangSQ(桑世强)</Authors>
+	<ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
