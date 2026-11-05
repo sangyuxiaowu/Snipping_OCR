@@ -1,6 +1,6 @@
 ﻿# Snipping_OCR
 
-Snipping_OCR is a straightforward desktop screenshot OCR tool designed for the Windows platform. It utilizes the system's built-in screenshot tool for capturing images and PaddleOCRSharp for OCR recognition. The software supports OCR character recognition in both Chinese and English.
+Snipping_OCR is a straightforward desktop screenshot OCR tool designed for the Windows platform. It utilizes the system's built-in screenshot tool for capturing images and [SimdPaddleOCR](https://github.com/sdcb/SimdPaddleOCR) with the PP-OCRv6 tiny model for OCR recognition. The software supports OCR character recognition in both Chinese and English.
 
 English | [简体中文](./README_zh.md)
 
