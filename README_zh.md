@@ -1,6 +1,6 @@
 ﻿# Snipping_OCR
 
-Snipping_OCR 是一个简单的桌面截图 OCR 工具，专为 Windows 平台设计。它使用系统自带的截图工具进行截图，并使用 PaddleOCRSharp 进行 OCR 识别。软件支持中英文的 OCR 字符识别。
+Snipping_OCR 是一个简单的桌面截图 OCR 工具，专为 Windows 平台设计。它使用系统自带的截图工具进行截图，并使用 [SimdPaddleOCR](https://github.com/sdcb/SimdPaddleOCR) 和 PP-OCRv6 tiny 模型进行 OCR 识别。软件支持中英文的 OCR 字符识别。
 
 [English](./README.md) | 简体中文
 

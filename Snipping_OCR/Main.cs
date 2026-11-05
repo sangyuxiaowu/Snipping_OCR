@@ -1,8 +1,10 @@
-﻿using PaddleOCRSharp;
+﻿using Sdcb.SimdPaddleOCR;
+using Sdcb.SimdPaddleOCR.Models.ChineseV6Tiny;
 using Sang.Baidu.TranslateAPI;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Globalization;
+using System.Runtime.InteropServices;
 
 #if NET481_OR_GREATER
 using System;
@@ -29,7 +31,7 @@ namespace Snipping_OCR
         /// <summary>
         /// OCR 引擎
         /// </summary>
-        private PaddleOCREngine engine;
+        private PaddleOcrAll engine;
 
         /// <summary>
         /// 专注模式
@@ -121,11 +123,7 @@ namespace Snipping_OCR
                 notifyIcon.ShowBalloonTip(2, Resources.ScreenOCR, Resources.HotkeyRegistrationFailed, ToolTipIcon.Info);
             }
 
-            OCRParameter oCRParameter = new OCRParameter()
-            {
-                use_gpu = true,
-            };
-            engine = new PaddleOCREngine(null, oCRParameter);
+            engine = PaddleOcrAll.Load(ChineseV6TinyModels.Default);
 
             // 获取翻译配置
             GetTranslateConfig();
@@ -184,6 +182,8 @@ namespace Snipping_OCR
             {
 
             }
+
+            engine?.Dispose();
         }
 
 
@@ -292,29 +292,38 @@ namespace Snipping_OCR
         /// <param name="imgfile"></param>
         private void showFileOcr(Image imgfile)
         {
-            //识别结果对象
-            var ocrResult = new OCRResult();
-            ocrResult = engine.DetectText(ImageToBytes(imgfile));
-            var txt = "";
-            if (ocrResult.TextBlocks.Count > 0)
+            string txt;
+            using (var bitmap = new Bitmap(imgfile.Width, imgfile.Height, PixelFormat.Format24bppRgb))
             {
-                foreach (var item in ocrResult.TextBlocks)
+                using (var graphics = Graphics.FromImage(bitmap))
                 {
-                    txt += item.Text + "\r\n";
+                    graphics.DrawImage(imgfile, new Rectangle(0, 0, bitmap.Width, bitmap.Height));
+                }
+
+                var rectangle = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+                var bitmapData = bitmap.LockBits(rectangle, ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+                try
+                {
+                    int stride = Math.Abs(bitmapData.Stride);
+                    byte[] pixels = new byte[checked(stride * bitmap.Height)];
+                    for (int y = 0; y < bitmap.Height; y++)
+                    {
+                        Marshal.Copy(IntPtr.Add(bitmapData.Scan0, y * bitmapData.Stride), pixels, y * stride, stride);
+                    }
+
+                    txt = engine.Run(pixels, bitmap.Width, bitmap.Height, stride, ImagePixelFormat.Bgr24).Text;
+                }
+                finally
+                {
+                    bitmap.UnlockBits(bitmapData);
                 }
             }
+
             this.BeginInvoke(new Action(() =>
             {
                 if (!string.IsNullOrEmpty(txt) && txt != textOCR.Text) textOCR.Text = txt;
                 textOCR.Cursor = Cursors.IBeam;
             }));
-        }
-
-        private byte[] ImageToBytes(Image img)
-        {
-            MemoryStream ms = new MemoryStream();
-            img.Save(ms, ImageFormat.Jpeg);
-            return ms.ToArray();
         }
 
         /// <summary>
